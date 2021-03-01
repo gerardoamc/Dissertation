@@ -1,0 +1,77 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     Gerardo Mazzei                         %
+%  based on Luke Van Hulle's and Christian Schaefer's thesis %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The main thesis document
+
+%% These arara commands are placed here to show the order of operations required to compile this document. If you want to use arara with the subfiles package then these commands will also need to go in every included file. Ensure that you create the user command "arara %.tex" to ensure proper compiling. 
+
+% arara: pdflatex
+% arara: nomencl
+% arara: bibtex
+% arara: pdflatex
+
+\documentclass[ 12pt, letterpaper, twoside, openany]{book}
+
+%These files define a lot of the formatting and commands used throughout the document
+\input{02_Inputs}
+\input{03_PGF_Plot}
+\input{04_Colors}
+
+% To make the Structure section work in TexMaker it needs to see
+% the \include command, but the subfiles package needs \subfile
+% so I changed \include to just call \subfile.
+\renewcommand{\include}[1]{
+        \subfile{#1}}
+
+\begin{document}
+        \frontmatter
+        		\pagenumbering{gobble} %No page number in front matter
+                \include{cover}
+                \addcontentsline{toc}{chapter}{Front Matter}
+                \pagenumbering{roman}
+                \include{abstract}                
+                \addcontentsline{toc}{section}{Abstract}
+                %\include{acknowledgments}
+               % \addcontentsline{toc}{section}{Acknowledgments}
+                \renewcommand{\contentsname}{Table of Contents}
+                \tableofcontents
+                
+                \printnomenclature
+                \addcontentsline{toc}{section}{Nomenclature}
+                \listoffigures
+                \addcontentsline{toc}{section}{\listfigurename}
+               \listoftables
+               \addcontentsline{toc}{section}{\listtablename}
+               \cleardoublepage
+                               
+        \mainmatter
+                \pagestyle{fancy} % Needed again because it is turned off in some
+                                                  % previous sections.                
+                \include{introduction}
+                \include{background}
+                \include{oocriterion}
+                \include{proposal}
+                %\include{results}
+                %\include{conclusions}
+%               \include{examples}
+
+		%Create Bibliography
+		\cleardoublepage
+        \phantomsection
+		\addcontentsline{toc}{chapter}{Bibliography}
+		\printbibliography		
+        %Create Appendices
+        
+		\appendix
+			%\include{mg94}
+			%\pagestyle{fancy}
+			%\include{fsurfcode}
+			%\include{data}
+			%\include{surf}
+			
+
+
+        
+\end{document}

@@ -1,0 +1,19 @@
+# gitignore file for prelim Latex document
+# Gerardo Mazzei, 04/2020
+
+#Latex logs and temp files
+*.log
+*.synctex.gz
+*.aux
+*.bbl
+*.lof
+*.lot
+*.nlo
+*.out
+*.blg
+*.run.xml
+*.toc
+*.bib
+
+#Include only prelim bib file
+!prelim.bib

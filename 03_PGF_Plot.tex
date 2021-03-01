@@ -1,0 +1,71 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Präamble: Ploteinstellungen
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Für Plots
+\usepackage{pgfplots}
+\usepackage{pgf}
+\usepackage{chemfig}
+% Version
+\pgfplotsset{compat=1.9}
+\usepgfplotslibrary{patchplots}
+
+% Hauptgitter
+\pgfplotsset{major grid style={gray}}
+
+% Nebengitter
+%\pgfplotsset{minor grid style={dashed,red}}
+
+% Alles inerhalb von Tikz-Umgebung in SF
+\tikzset{ every picture/.style = {font=\rmfamily} }
+
+% Groupplots erlauben
+\usepgfplotslibrary{groupplots}
+
+\usetikzlibrary{patterns,chains}
+
+%Für Bilder
+\usepackage{tikz}
+  
+\usetikzlibrary{shapes.geometric}% für Ellipse
+%\tikzset{
+%  pfeil/.style={stealth-},
+%  beschr/.style={remember picture,overlay,font=\small}}
+%\newcommand\mrahmen[3][]{%
+%  \tikz[baseline,remember picture]
+%    \node[anchor=base,inner sep=2pt,draw=#2,#1]{$\displaystyle#3$};}
+%\colorlet{mfarbe}{red}
+%\newcommand\sbinom[2]{\genfrac{}{}{0pt}{}{#1}{#2}}
+
+\usetikzlibrary{calc,positioning,arrows}
+\usetikzlibrary{fit}
+
+%Für Plots
+\usepackage{tikzscale}
+\usepackage{filecontents}
+
+%Wegen Overwriting
+\usepackage{silence} 
+\WarningFilter{latex}{Overwriting file}
+
+\tikzset{ every pin/.style={rectangle,rounded corners=3pt,font=\small}, small dot/.style={fill=black,circle,scale=0.3}}
+
+% \pgfplotsset{
+  % tick label style = {font=\sansmath\sffamily},
+  % every axis label = {font=\sansmath\sffamily},
+  % legend style = {font=\sansmath\sffamily},
+  % label style = {font=\sansmath\sffamily}
+% }
+
+% PEC Style Graph
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Globale Definition der Einträge!
+\pgfplotsset{
+    cycle list={PEC_red,mark=triangle,line width = 1pt,smooth\\
+                black,mark=square,line width = 1pt,smooth\\
+                gray,mark=triangle,line width = 1pt,smooth\\
+                PEC_red2,mark=square,line width = 1pt,smooth\\
+                },
+}

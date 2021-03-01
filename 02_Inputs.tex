@@ -1,0 +1,131 @@
+% 02_Inputs.tex
+% the packages are put in a seperate file to help keep the main.tex file clean
+
+% To use the fontec package properly make sure the cm-super
+% package is installed for MikTex.
+% https://docs.miktex.org/2.9/manual/pkgmgt.html
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+
+\usepackage[textwidth=65pt]{todonotes}
+\usepackage{siunitx} % provides formating for numbers with SI units
+
+\usepackage{subfiles} % For being able to compile the subfiles on their own
+
+%For math related stuff
+\usepackage{amsmath}
+\usepackage{systeme}
+
+\usepackage{lipsum} % Used for making dummy text
+
+\usepackage{booktabs} % Makes tables better
+\usepackage{tablefootnote} % for making footnotes in tables
+
+% used for loading graphics
+\usepackage{graphicx}
+\graphicspath{{Figures/}}
+% used for making sub-figures
+\usepackage{subfig}
+%used for placing text over images
+\usepackage[percent]{overpic}
+
+% Helps with making arrow with overpic
+\usepackage{pict2e}
+
+% use the \layout command and compile to show margins
+\usepackage{layout}
+
+% For figures with text wrapped around them
+\usepackage{wrapfig}
+% For tables with longer text, where manipulating space may be a pain
+\usepackage{tabu}
+% For special formating of lists
+\usepackage{enumitem}
+
+\usepackage{nomencl}
+\makenomenclature
+\renewcommand{\nomname}{Symbols and Acronyms}
+
+% From https://www.sharelatex.com/learn/Nomenclatures
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{S}{Symbols}{%
+  \ifstrequal{#1}{A}{Acronyms}}%
+]}
+ 
+% This will add the units to nomenclature
+%----------------------------------------------
+\newcommand{\nomunit}[1]{%
+\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+%----------------------------------------------
+
+\usepackage{titlesec}
+
+\titleformat{\chapter}
+  {\huge\bfseries} % format
+  {\thechapter \enspace}   % label
+  {0pt}             % sep
+  {\huge}           % before-code
+
+% Change the plain style used by chapters as shown on page 7 of
+% the fancyhdr manual: http://texdoc.net/texmf-dist/doc/latex/fancyhdr/fancyhdr.pdf
+\fancypagestyle{plain}{%
+\fancyhf{} % clear all header and footer fields
+\fancyhead[LE, RO]{\thepage} %RO=right odd, RE=right even
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+\setlength{\headheight}{14.5pt} % to prevent the \headheight warning
+\fancyhf{}
+
+%%% Use these four to make it look like a nice book
+\fancyhead[LE, RO]{\thepage} % Page number
+\fancyhead[LO, RE]{\slshape \leftmark} % Chapter number and name
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\headrulewidth}{1pt}
+
+%%% Use these two make it fit the University Guidelines
+%\fancyhead[RE, RO]{\thepage}
+%\renewcommand{\headrulewidth}{0pt}
+
+
+% set the margins to the UW-Madison's standard
+\usepackage[left=1.3in,
+                        top=1.3in,
+                        right=1.1in,
+                        bottom=1.1in,
+                        marginparwidth=65pt]
+                        {geometry}
+
+\usepackage[backend=bibtex, sorting=none,maxbibnames=99]{biblatex} %References are numbered per order of use in the text as opposed to alphabetically (default)
+\addbibresource{BibTex/prelim.bib}
+
+\usepackage[numbered]{matlab-prettifier} % Used to import MATLAB code 
+\usepackage{epigraph} % Only used in the SciSlice chapter
+%\usepackage{pdfpages} % Used to import pdfs onto the document
+
+%------------------------------------------------------------------------------------		
+%Hyperlinks and PDF Settings
+\usepackage[
+	bookmarksopen =false, 				% Display bookmarks when the document is opened
+	pdftoolbar =true, 					% Display Acrobat reader toolbar
+	bookmarksnumbered =true,			% Display section numbers
+	pdfpagelabels = false, 				% Display original page numbers
+	%plainpages = false, 				% Blank pages
+	hyperfootnotes=true,
+	pdfpagelayout = TwoPageRight, 		% Open PDF as 2 sided when opened	
+]{hyperref}
+
+%Hyperref format
+\hypersetup{
+	colorlinks=true,	% Hyperlinks are colored
+	linkcolor=blue,		% Color of internal links (within document)
+	citecolor=blue,	    % Color of internal links to the Reference page (within document)
+	urlcolor=blue,		% Color of URLs (external) - default is magenta.
+	pdftitle = {Predicting mechanical properties of FFF parts1},
+	pdfsubject = {Prelim 2020},
+	pdfauthor = {Gerardo A. Mazzei Capote},
+	pdfkeywords = { },	
+}
+\usepackage{url}
