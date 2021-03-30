@@ -263,7 +263,99 @@ A similar procedure can be followed for any $\sigma_{ii}$-$\tau_{ij}$ interactio
 \end{table}
 
 
-Properly mapping a failure surface through a criterion proves to be an invaluable tool for design, since it allows engineers to assess if a part will perform safely under its intended loading conditions. Such tool could help overcome the main shortcoming of FFF, since a failure envelope would allow proper part design considerations. Chapter \ref{ch:oocrit} describes in detail how the SSIC has been applied to AM technologies. Particular attention is given to how this FC was applied to FFF parts. 
+The SSIC offers a way of capturing in a more accurate manner the different failure modes of parts produced through AM technologies. As an example, the model has been successfully implemented by Obst \emph{et al.} in 2018 for SLS manufactured parts produced with PA12 \cite{Obst2018, Obst2017}. Their results show how the model was able to capture the $\tau_{12}$-$\sigma_{22}$ and $\sigma_{11}$-$\sigma_{22}$ interactions. The failure surface obtained, shown in Figure \ref{fig:OOCSLS}, was able to capture the interactions between certain axial and transverse stresses. However, due to the limitations of the SLS process, it was not possible to measure the interaction slope between the $\tau_{12}$ and $\sigma_{11}$ directions.
+
+\begin{figure}[h]
+	\center
+	\includegraphics[height=6cm]{Obst_SLS}
+	\caption{Failure surface for SLS developed through the SSIC \cite{Obst2018}} \label{fig:OOCSLS}
+\end{figure}
+
+Recent work by Osswald \emph{et al.} \cite{Osswald2020a} generated a failure envelope for Multi-Jet Fusion (MJF) parts produced using PA12, and compared it to the surface obtained by Obst \emph{et al.} \cite{Obst2018}. Results indicate that, while both techniques are based on Powder Based Fusion (PBF) and use the same material, the envelopes for each AM technology were distinct, serving as proof that these technologies are not as comparable under complex loading conditions as previously assumed. The transverse-axial interaction for the MJF case was significantly less pronounced than for SLS, further reinforcing that each AM technique needs to be studied in a case-by-case basis in terms of mechanical failure characterization. 
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=10cm]{pbfcomp}
+	\caption{Comparison of the $\sigma_{22} - \tau_{12}$ interaction for SLS and MJF PA12 parts \cite{Osswald2020a}} \label{fig:pbfcomp}
+\end{figure}
+
+\section{Development of SSIC envelope for FFF parts}\label{sec:SSICFFF}
+
+In 2019, Mazzei Capote \emph{et al.} \cite{MazzeiCapote2019} developed a failure envelope for FFF parts produced using a customized ABS filament produced in-house. Specimens were produced using either a commercially available desktop FFF printer (Lulzbot TAZ5, USA), or a customized 6-axis robotic printing solution whenever the bead orientation was hard to achieve using a \emph{2.5-D} machine. The robotic printer was based on a 6-axis robot (ABB IRB-120, Switzerland) and fitted with a stationary printhead mounted on an aluminum frame, chosen to be the same extruder from the traditional printer (LulzBot TAZ Single Extruder Tool Head v2, 0.5 mm nozzle, USA) to minimize machine influence on the results \cite{VanHulle2017}. The final surface obtained showed significant stress interactions in certain directions. Starting with the $\sigma_{11}$-$\sigma_{22}$ plane, it can be seen that the failure envelope has a slight tilt. Refer to Figure~\ref{fig:1122plane} for a graph showing the calculated failure envelope, including the experimental data for reference. This tilt is evidence of an interaction between the transverse and longitudinal stresses. The conclusion is that FFF parts produced with the print parameters used in the study should show strengthening when loaded bi-axially in compression.
+
+\begin{figure}[h]
+	\center
+	\includegraphics[width=\linewidth, keepaspectratio]{11_22plane}
+	\captionsetup{justification=centering} %long caption
+	\caption[failure envelope in the $\sigma_{11}$-$\sigma_{22}$ plane]{$\sigma_{11}$-$\sigma_{22}$ plane including data for reference.} \label{fig:1122plane}
+\end{figure}
+
+\pagebreak
+
+Using the results from combined loading tests plotted in the $11-12$ and $22-12$ planes allows visualization of the transverse-axial stress interactions. Beginning with the $11-12$ plane, it can be seen that the calculated interaction slope $\mu^{1112}$ equals $5.2\times 10^{-3}$, a value that's practically zero. Using this parameter, the failure surface shown in Figure \ref{fig:1112plane} can be obtained. A dashed line representing $\mu^{1112}$ is added for reference. The $22-12$ plane by comparison reveals a considerable slope. It can be seen through the use of combined loads that there is a slight decrease in the shear strength of the specimens when a tensile load is applied in the $2-2$ direction. A slope of -0.2 was obtained for $\mu^{2212}$. Figure \ref{fig:2212plane} shows the resulting surface with the data and a line with a slope of -0.2 overlaid for reference.
+
+\pagebreak
+
+\begin{figure}[h]
+	\center
+	\subfloat[failure envelope in the $\sigma_{11}$-$\tau_{12}$ plane\label{fig:1112plane}]{%
+		\includegraphics[width=0.9\linewidth, keepaspectratio]{11_12plane}
+	}
+	\linebreak
+	\subfloat[failure envelope in the $\sigma_{22}$-$\tau_{12}$ plane\label{fig:2212plane}]{%
+		\includegraphics[width=0.9\linewidth, keepaspectratio]{22_12plane}
+	}
+	\caption{Comparison of interaction slopes in the axial-transverse stress planes} \label{fig:SSIcomp}
+\end{figure}
+
+\section{Validation of the FFF Failure envelope}\label{sec:FFFval}
+
+The validity of the envelope described in Section \ref{sec:SSICFFF} was tested by Mazzei Capote  \emph{et al.} \cite{MazzeiJCompSci} in 2019. In this study, the failure function was used to estimate the failure stress of mechanical coupons loaded under tension, with a variety of raster angles being used to generate a complex loading state in the local coordinate system. Results indicated the failure prediction boundary was within 5 to 10\% of the real value. Results are summarized in Figure \ref{fig:jcompscir}, where the average of 5 mechanical tests per raster angle is represented in a dot, and the SSIC predicted failure stress is shown in a bright red line. These are compared to simpler FC, such as the maximum stress criteria in the $\sigma_{11}$, $\sigma_{22}$, and $\tau_{12}$ directions, labeled M1-1, M2-2, and M1-2 respectively. 
+
+\begin{figure}[!htbp]
+	\center
+	\subfloat[Loading \label{fig:complload}]{%
+		\includegraphics[height=9cm, keepaspectratio]{compl_load.jpg}
+	}
+	\hfill
+	\subfloat[Comparison of data and failure prediction using various FC\label{fig:compsci}]{%
+		\includegraphics[height=9cm, keepaspectratio]{FC_comp.png}
+	}
+	\caption{Results from \cite{MazzeiJCompSci}} \label{fig:jcompscir}
+\end{figure} 
+
+
+While the use of FC in AM is promising, its adoption has been limited in scope. Part of the problem lies in the large number of mechanical tests required to achieve a trustworthy failure envelope, as well as the requirement of specialized equipment \textendash~such as a variety of mechanical testing devices, as well as specialized printing solutions as seen in the FFF failure envelope. Chapter \ref{ch:ml} outlines  machine learning methods, that can be used to predict the mechanical response of FFF parts based on process parameters. Some, if not all of the concepts explored could easily be extrapolated to other AM techniques. It should be noted that the two methods are not mutually exclusive. A combination of both FC and machine learning predictive methods can potentially lead to higher adoption rates of AM in industrial scenarios where the final desired application involves complex mechanical loads upon the finished part.  
+
+The use of AM technologies to produce small batches of highly customized, complex parts, in a reduced development cycle results extremely attractive. While constructing failure envelopes can help overcome the wariness of industrial segments to design end-user parts, this resource is still not easy to implement, requiring a large number of mechanical tests and specialized equipment to properly map the failure behavior of a particular material. Additional complexity stems from what was shown in Chapter \ref{ch:oocrit}: processing the same material under related AM technologies yields completely different failure envelopes, implying that no generalizations should be made, and each material-process pairing needs to be studied on a case-by-case basis. In general, for AM parts to be adopted, engineers have to be able to confidently assess the probability of part failure under particular loading conditions, predict the expected mechanical properties of AM parts, and understand the underlying physics of the process. None of these conditions are completely met at the time of this work.
+
+This work aims to provide the tools required to understand and predict mechanical performance of parts manufactured through FFF through the use of Machine Learning technologies (ML), based on process variables measured during a print using an FFF printer modified with sensors. Additionally, some, if not all of the procedures developed in this work could be extrapolated to other AM techniques.
+
+\section{Machine Learning Techniques} \label{sec:ml}
+
+The set of printing conditions that lead to an optimal part in terms of mechanical properties aren't still fully comprehended. However, if there existed an FFF machine with in-line sensors that allowed monitoring a variety of process-variables, as well as data generated from mechanical tests and ancillary experiments, this would constitute an interesting case for development of a Machine Learning (ML) system. These excel in cases where the inputs and outcomes of a particular phenomena or task are known, but connecting the two through an explicit set of rules or relationships can result extremely complex and time consuming \cite{Chollet2018}. In this manner, ML models are \emph{trained}, as opposed to explicitly programmed, as illustrated in Figure \ref{fig:MLvsP}, where the differences between ML and traditional programming philosophies are compared. 
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=6cm]{ML}
+	\caption{Differences between traditional programming and machine learning. \cite{Chollet2018}} \label{fig:MLvsP}
+\end{figure}
+
+The potential to apply ML solutions in the field of AM has been noted by several authors \cite{Razvi2019,Meng2020}. Example cases include design-recommendation systems, topology optimization solutions, tolerancing and manufacturability assessment, and material classification and selection \cite{Razvi2019}. The specific algorithm applied for each case varied wildly depending on the nature of the task, but in general, Support Vector Machines (SVM) and Neural Networks (NN) appear to be the most prevalent solutions.
+
+Given the factors outlined this far, the fundamental goal of this research is to predict FFF part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. The success of this project would allow design engineers to confidently assess if a part manufactured through FFF will meet the mechanical requirements imposed by its intended application. This work proposes developing and using a modified printer with force and print speed sensors, as well as mechanical testing and $\mu$CT scans to generate data that can be used to train a predictive tool based on ML. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. This ML system would accept filament dimensions, printing temperature, filament force, filament velocity, print orientation, layer height, or any subset of these items as inputs, and produce final part porosity and/or mechanical strength in a particular load direction as outputs. These parameters were chosen based on previous work performed by Koch, Van Hulle and Rudolph \cite{Koch2017}, where the final tensile strength of FFF coupons was shown to be related to the morphology of the printed bead, which is significantly affected by processing parameters and variations in the volumetric output of the nozzle; research published by Sood \emph{et al.} \cite{Sood2012} where a NN was able to predict the compressive strength of FDM parts with an $R^2= 0.9977$ using layer thickness, raster angle, orientation, raster width, and air gap as inputs; as well as the proposed FFF melting models established by Bellini \emph{et al.} \cite{Bellini2004} and Osswald \emph{et al.} \cite{OsswaldMelting18}. The specifics of the architecture of the ML system are still under development, as it may prove useful to segment the problem into several sub-systems connected in series, in what is called a machine learning \emph{pipeline} \cite{Geron2019}. However, given the specifics of the task, one can conclude that the system will involve supervised learning applied to a regression problem, given that all the inputs to the system will consist of pre-selected attributes, and the mechanical response and/or porosity of a printed part can be treated as a target value the ML system has to be able to predict \cite{Mohammed2017, Meng2020}.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=3cm]{ML2}
+	\caption{Pipeline architecture for advanced ML systems \cite{Geron2019}} \label{fig:pipeline}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=7.5cm]{SL}
+	\caption{Taxonomy of ML applications in AM \cite{Meng2020}} \label{fig:supL}
+\end{figure}
 
 %______________________________________________________________________________________
 % Nomenclature introduced in this chapter:
@@ -274,6 +366,15 @@ Properly mapping a failure surface through a criterion proves to be an invaluabl
 \nomenclature[A]{GKC}{Gol'denblat-Kopnov Criterion}% 
 \nomenclature[A]{MJF}{Multi-Jet Fusion}% 
 \nomenclature[A]{PBF}{Powder Bed Fusion}% 
+\nomenclature[A]{SSIC}{Stress-Stress Interaction Criterion}% 
+\nomenclature[A]{GKC}{Gol'denblat-Kopnov Criterion}% 
+\nomenclature[A]{MJF}{Multi-Jet Fusion}% 
+\nomenclature[A]{PBF}{Powder Bed Fusion}% 
+\nomenclature[A]{ML}{Machine Learning}% 
+\nomenclature[A]{SVM}{Support Vector Machines}%
+\nomenclature[A]{NN}{Neural Network}%
+\nomenclature[A]{MSE}{Mean Square Error}%
+\nomenclature[A]{MAE}{Mean Absolute Error}%
 
 % Symbols introduced in this chapter:
 \nomenclature[S]{$\sigma$}{Axial stress \nomunit{$MPa$}}
@@ -284,6 +385,15 @@ Properly mapping a failure surface through a criterion proves to be an invaluabl
 \nomenclature[S]{$\tau_{12}$}{Shear stress in the 1-2 plane \nomunit{$MPa$}}
 \nomenclature[S]{$\tau_{13}$}{Shear stress in the 1-3 plane \nomunit{$MPa$}}
 \nomenclature[S]{$\tau_{23}$}{Shear stress in the 2-3 plane \nomunit{$MPa$}}
+\nomenclature[S]{$X_t$}{Tensile strength in the 1-1 direction \nomunit{$MPa$}}
+\nomenclature[S]{$X_c$}{Compressive strength in the 1-1 direction \nomunit{$MPa$}}
+\nomenclature[S]{$Y_t$}{Tensile strength in the 2-2 direction \nomunit{$MPa$}}
+\nomenclature[S]{$Y_c$}{Compressive strength in the 2-2 direction \nomunit{$MPa$}}
+\nomenclature[S]{$S$}{Shear strength in the 1-2 plane \nomunit{$MPa$}}
+\nomenclature[S]{$S_{45p}$}{Positive shear strength for 45$^\circ$ specimen \nomunit{$MPa$}}
+\nomenclature[S]{$S_{45n}$}{Negative shear strength for 45$^\circ$ specimen \nomunit{$MPa$}}
+\nomenclature[S]{$\mu^{1112}$}{SSIC parameter- slope at pure shear failure in the $\sigma_{11}$ - $\tau_{12}$ plane \nomunit{$-$}}
+\nomenclature[S]{$\mu^{2212}$}{SSIC parameter- slope at pure shear failure in the $\sigma_{22}$ - $\tau_{12}$ plane \nomunit{$-$}}
 \nomenclature[S]{$X_t$}{Tensile strength in the 1-1 direction \nomunit{$MPa$}}
 \nomenclature[S]{$X_c$}{Compressive strength in the 1-1 direction \nomunit{$MPa$}}
 \nomenclature[S]{$Y_t$}{Tensile strength in the 2-2 direction \nomunit{$MPa$}}

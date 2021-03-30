@@ -1,7 +1,7 @@
 % oocriterion.tex
 \documentclass[main.tex]{subfiles}
 \begin{document}
-\chapter{Previous work} \label{ch:oocrit}
+\chapter{AM Part Failure Prediction} \label{ch:oocrit}
 
 
 The SSIC offers a way of capturing in a more accurate manner the different failure modes of parts produced through AM technologies. As an example, the model has been successfully implemented by Obst \emph{et al.} in 2018 for SLS manufactured parts produced with PA12 \cite{Obst2018, Obst2017}. Their results show how the model was able to capture the $\tau_{12}$-$\sigma_{22}$ and $\sigma_{11}$-$\sigma_{22}$ interactions. The failure surface obtained, shown in Figure \ref{fig:OOCSLS}, was able to capture the interactions between certain axial and transverse stresses. However, due to the limitations of the SLS process, it was not possible to measure the interaction slope between the $\tau_{12}$ and $\sigma_{11}$ directions.
@@ -66,7 +66,7 @@ The validity of the envelope described in Section \ref{sec:SSICFFF} was tested b
 \end{figure} 
 
 
-While the use of FC in AM is promising, its adoption has been limited in scope. Part of the problem lies in the large number of mechanical tests required to achieve a trustworthy failure envelope, as well as the requirement of specialized equipment \textendash~such as a variety of mechanical testing devices, as well as specialized printing solutions as seen in the FFF failure envelope. Chapter \ref{ch:proposal} outlines proposed work aimed at predicting the mechanical response of FFF parts using machine learning methods. Some, if not all of the concepts explored could easily be extrapolated to other AM techniques. It should be noted that the two methods are not mutually exclusive. A combination of both FC and machine learning predictive methods can hopefully lead to a higher adoption rates of AM in industrial scenarios where the final desired application involves complex mechanical loads upon the finished part. 
+While the use of FC in AM is promising, its adoption has been limited in scope. Part of the problem lies in the large number of mechanical tests required to achieve a trustworthy failure envelope, as well as the requirement of specialized equipment \textendash~such as a variety of mechanical testing devices, as well as specialized printing solutions as seen in the FFF failure envelope. Chapter \ref{ch:ml} outlines  machine learning methods, that can be used to predict the mechanical response of FFF parts based on process parameters. Some, if not all of the concepts explored could easily be extrapolated to other AM techniques. It should be noted that the two methods are not mutually exclusive. A combination of both FC and machine learning predictive methods can potentially lead to higher adoption rates of AM in industrial scenarios where the final desired application involves complex mechanical loads upon the finished part. 
 
 % Nomenclature introduced in this chapter:
 \nomenclature[A]{SSIC}{Stress-Stress Interaction Criterion}% 
