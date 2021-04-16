@@ -1,7 +1,7 @@
 
 \begin{thenomenclature} 
 \nomgroup{A}
-  \item [{$\mu$CT}]\begingroup Micro Computer Tomography\nomeqref {1.5}\nompageref{22}
+  \item [{$\mu$CT}]\begingroup Micro Computer Tomography\nomeqref {1.5}\nompageref{21}
   \item [{ABS}]\begingroup Acrylonitrile Butadiene Styrene\nomeqref {0}\nompageref{3}
   \item [{AI}]\begingroup Artificial Intelligence\nomeqref {0}\nompageref{3}
   \item [{AM}]\begingroup Additive Manufacturing\nomeqref {0}\nompageref{3}
@@ -9,36 +9,36 @@
   \item [{FC}]\begingroup Failure Criterion\nomeqref {0}\nompageref{3}
   \item [{FDM}]\begingroup Fused Deposition Modeling\texttrademark\nomeqref {0}\nompageref{3}
   \item [{FFF}]\begingroup Fused Filament Fabrication\nomeqref {0}\nompageref{3}
-  \item [{GKC}]\begingroup Gol'denblat-Kopnov Criterion\nomeqref {1.5}\nompageref{22}
-  \item [{MAE}]\begingroup Mean Absolute Error\nomeqref {1.5}\nompageref{22}
-  \item [{MJF}]\begingroup Multi-Jet Fusion\nomeqref {1.5}\nompageref{22}
-  \item [{ML}]\begingroup Machine Learning\nomeqref {1.5}\nompageref{22}
-  \item [{MSE}]\begingroup Mean Square Error\nomeqref {1.5}\nompageref{22}
-  \item [{NN}]\begingroup Neural Network\nomeqref {1.5}\nompageref{22}
+  \item [{GKC}]\begingroup Gol'denblat-Kopnov Criterion\nomeqref {1.5}\nompageref{21}
+  \item [{MAE}]\begingroup Mean Absolute Error\nomeqref {1.5}\nompageref{21}
+  \item [{MJF}]\begingroup Multi-Jet Fusion\nomeqref {1.5}\nompageref{21}
+  \item [{ML}]\begingroup Machine Learning\nomeqref {1.5}\nompageref{21}
+  \item [{MSE}]\begingroup Mean Square Error\nomeqref {1.5}\nompageref{21}
+  \item [{NN}]\begingroup Neural Network\nomeqref {1.5}\nompageref{21}
   \item [{PA12}]\begingroup Polyamide 12\nomeqref {0}\nompageref{3}
-  \item [{PBF}]\begingroup Powder Bed Fusion\nomeqref {1.5}\nompageref{22}
+  \item [{PBF}]\begingroup Powder Bed Fusion\nomeqref {1.5}\nompageref{21}
   \item [{RP}]\begingroup Rapid Prototyping\nomeqref {0}\nompageref{3}
-  \item [{SLA}]\begingroup Stereolithography\nomeqref {1.5}\nompageref{22}
-  \item [{SLS}]\begingroup Selective Laser Sintering\nomeqref {1.5}\nompageref{22}
-  \item [{SSIC}]\begingroup Stress-Stress Interaction Criterion\nomeqref {1.5}\nompageref{22}
-  \item [{SVM}]\begingroup Support Vector Machines\nomeqref {1.5}\nompageref{22}
+  \item [{SLA}]\begingroup Stereolithography\nomeqref {1.5}\nompageref{21}
+  \item [{SLS}]\begingroup Selective Laser Sintering\nomeqref {1.5}\nompageref{21}
+  \item [{SSIC}]\begingroup Stress-Stress Interaction Criterion\nomeqref {1.5}\nompageref{21}
+  \item [{SVM}]\begingroup Support Vector Machines\nomeqref {1.5}\nompageref{21}
 \nomgroup{S}
-  \item [{$\mu^{1112}$}]\begingroup SSIC parameter- slope at pure shear failure in the $\sigma_{11}$ - $\tau_{12}$ plane \nomunit{$-$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\mu^{2212}$}]\begingroup SSIC parameter- slope at pure shear failure in the $\sigma_{22}$ - $\tau_{12}$ plane \nomunit{$-$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\sigma$}]\begingroup Axial stress \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\sigma_{11}$}]\begingroup Axial stress in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\sigma_{22}$}]\begingroup Axial stress in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\sigma_{33}$}]\begingroup Axial stress in the 3-3 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\tau$}]\begingroup Shear stress \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\tau_{12}$}]\begingroup Shear stress in the 1-2 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\tau_{13}$}]\begingroup Shear stress in the 1-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$\tau_{23}$}]\begingroup Shear stress in the 2-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$S$}]\begingroup Shear strength in the 1-2 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$S_{45n}$}]\begingroup Negative shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$S_{45p}$}]\begingroup Positive shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$X_c$}]\begingroup Compressive strength in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$X_t$}]\begingroup Tensile strength in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$Y_c$}]\begingroup Compressive strength in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
-  \item [{$Y_t$}]\begingroup Tensile strength in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{22}
+  \item [{$\mu^{1112}$}]\begingroup SSIC parameter- slope at pure shear failure in the $\sigma_{11}$ - $\tau_{12}$ plane \nomunit{$-$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\mu^{2212}$}]\begingroup SSIC parameter- slope at pure shear failure in the $\sigma_{22}$ - $\tau_{12}$ plane \nomunit{$-$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\sigma$}]\begingroup Axial stress \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\sigma_{11}$}]\begingroup Axial stress in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\sigma_{22}$}]\begingroup Axial stress in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\sigma_{33}$}]\begingroup Axial stress in the 3-3 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\tau$}]\begingroup Shear stress \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\tau_{12}$}]\begingroup Shear stress in the 1-2 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\tau_{13}$}]\begingroup Shear stress in the 1-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$\tau_{23}$}]\begingroup Shear stress in the 2-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$S$}]\begingroup Shear strength in the 1-2 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$S_{45n}$}]\begingroup Negative shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$S_{45p}$}]\begingroup Positive shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$X_c$}]\begingroup Compressive strength in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$X_t$}]\begingroup Tensile strength in the 1-1 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$Y_c$}]\begingroup Compressive strength in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
+  \item [{$Y_t$}]\begingroup Tensile strength in the 2-2 direction \nomunit{$MPa$}\nomeqref {1.5}\nompageref{21}
 
 \end{thenomenclature}
