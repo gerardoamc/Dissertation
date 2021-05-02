@@ -8,6 +8,42 @@ Material Extrusion (ME), also known as Fused Filament Fabrication (FFF), is the 
 
 In the context of this dissertation, every ML solution begins with a data acquisition and exploration step. This study represents just that, as it allowed the researcher to understand an FFF machine with sensors, develop data filtering techniques, and the deployment of automation protocols that made acquisition of the training and validation data sets of the ML model a lot easier and faster. Finally, and as an added bonus, the results of this study shed some light into the current limitations intrinsic to two of the most widely used melting models for FFF: the Bellini \emph{et al.} model, and the Osswald, Puentes, Kattinger model, as both require measurements of filament force and speed to compare data with theoretical predictions \textemdash a feat that was uncommon at the time of this body of work.
 
+\section{Introduction}
+
+One of the major pain points from the Material Extrusion (ME) process is its relatively slow fabrication speed: while compelling for small batches of parts, ME can't come close to competing with other polymer processing techniques, such as injection molding, which can reproduce a complex part in a matter of seconds, as opposed to hours \cite{Baumers2016, Conner2014, Berman2012}. The cause of the sluggish nature of ME is rooted in heat transfer and the underlying physics of the process: as the thermoplastic filament is pushed through a heated chamber, polymer melt is formed and extruded through an opening at the tip of the nozzle, producing a bead of material that will be used to gradually reproduce the geometry of the desired part. The problem lies partially on the melt formation within the nozzle: its physics and limitations are not completely understood at the time of this writing, making print-speed optimization difficult and a matter of trial and error. Attempts to curb this issue through mathematical modeling of the melt formation exist, analytically derived through transport phenomena and rheology. Two major attempts exist, differing in the key assumptions made regarding how the molten polymer is formed and extruded. The first, proposed by Bellini, Güçeri and Bertoldi in 2004 \cite{Bellini2004}, and the second proposed by Osswald, Puentes and Kattinger in 2018 \cite{OsswaldMelting18} and improved upon by Colón et al. in 2020 \cite{ColonQuintana2020}. A schematic representation of both models can be seen in Figure \ref{fig:melt_model}.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.7\linewidth, keepaspectratio]{melt_models}
+	\caption{Bellini model (left) and Osswald, Puentes, Kattinger model (right) \cite{Oehlmann2021}.} \label{fig:melt_model}
+\end{figure}
+
+The Bellini, Güçeri and Bertoldi model assumes that a melt pool forms as soon as the filament enters the heated chamber, with the solid filament acting as a piston that allows the flow of the molten polymer \cite{Bellini2004}. Using the nomenclature shown in Figure 1, the model calculates the pressure requirements to push the molten polymer through three characteristic sections, labeled I, II, and III on the plot. Section I is approximated as pressure flow through a tube. The second section contains a pressure drop associated with the contraction of the nozzle radius, from $R_I$ to $R_{III}$. Finally, section III is also approximated as pressure flow through a tube. As an example, for section I the volumetric flow rate can be estimated using the following equations:
+
+\begin{equation} \label{eq:plm}
+	\eta=m\left(T\right){\dot{\gamma}}^{n-1}
+\end{equation}
+
+\begin{equation} \label{eq:vfr_mm}
+	Q=\left(\frac{n\pi}{3n+1}\right)\left[-\frac{R_1^{3n+1}}{2mL_I^{1/n}}\right]\Delta p_I^{1/n}=A_f\ U_{sz}
+\end{equation}
+
+Where, $\eta,\ \dot{\gamma},\ m,\ n$ represent the viscosity, shear rate, consistency index, and power-law index for a Power-law viscosity model for the polymeric melt, while $Q,\ \Delta,\ p_1,\ R_1,\ A_f$ represent the volumetric flow rate, pressure drop, filament radius, and filament area, respectively. It should be noted that the length $L_I$ is unknown and is a function of the filament movement speed $U_{sz}$. The model implies that the pressure necessary to extrude material through the capillary at the nozzle tip (region III) is considerably larger than the pressure requirements in regions I and II for a traditional 3D printer – where the nozzle diameter is usually in the order of hundreds of micrometers, while the filament diameter is either 1.75 mm or 2.85 mm \cite{ColonQuintana2020,Oehlmann2021}. After equating the Filament force $F_z$ to the following equation, one can manipulate the expressions to see that $U_{sz}$ is proportional to $F_z^{1/n}$. For additional details, the reader is invited to carefully examine the publication by Bellini, Güçeri and Bertoldi \cite{Bellini2004}.
+
+\begin{equation} \label{eq:force_bellini}
+	F_z=\Delta PA_f\approx\ \Delta p_{III}A_f
+\end{equation}
+
+The Osswald, Puentes, Kattinger model approaches the behavior of polymer extrusion akin to the formation of a melt film of limited thickness, governed by melting with pressure flow removal \cite{OsswaldMelting18, ColonQuintana2020}. In this approximation, the melt film thickness $\delta$ is assumed to be orders of magnitude smaller than the diameter of the filament, and the mathematical relationship that arises from deriving equations rooted in transport phenomena yields the following proportionality. The reader is invited to read the publication by Osswald, Puentes, and Kattinger for the derivation of this mathematical relationship \cite{OsswaldMelting18}.
+
+\begin{equation} \label{eq:force_osswald}
+	U_{sz}\ \alpha\ F_z^{1/4}
+\end{equation}   
+
+Each model has implications for the maximum print-speed possible and the required force necessary to achieve stable printing conditions, as the requisite for extrusion is that the force applied by the filament must be enough to overcome the pressure drop that occurs within the nozzle. However, experimental results that allow discerning between the two models are scarce, mainly because measuring the force exerted by the filament, or the pressure drop within the nozzle during printing is not trivial. Publications by Go, Schiffres, Stevens, and Hart \cite{Go2017}, as well as Go and Hart \cite{Go2017a} managed to measure filament force as a function of filament feed rate through the use of strain gauges. The results showed that pre-heating the filament before the heated chamber through IR allowed for higher throughputs of material at reduced force requirements. Results also indicated that a higher nozzle temperature would allow for higher feedrates at lower forces. However, these results were obtained from either a modified printer with specialized modifications that allow preheating of the filament prior to entry to the heating element, or an experimental setup built with strain gages. A traditional printer executing a print in real time was not examined. Additionally, Coogan and Kazmer \cite{Coogan2019}, and Chen and Smith \cite{Chen2019b} adapted an in-situ rheometer on the print head of the ME machine with the goal of capturing pressure measurements. Serdeczny et al. \cite{Serdeczny2019} also developed an experimental device where a custom ME printhead was adapted to house a load-cell, that reported live force readings to a DAQ system, with the goal of relating force readings to melt pressure and extrudate swelling. All of these studies accomplished measuring print force or melt pressure, however, these devices were either an approximation of a real printer, or the measurements were acquired during steady state and with extrusion being discharged upon open air \textemdash arguably not completely representative of real printing conditions.
+  
+This work used a desktop ME machine, with a customized filament force sensor and encoder that allows real time data acquisition of filament force and filament velocity during a continuous print. This print was repeated over a variety of print conditions, as well as using two different materials. The data and derived conclusions can then be used to improve the design of future equipment in ME that allows faster print speeds, as well as allowing further refinements in the melting models available for ME systems, as each would benefit from having real data pertaining to filament force and speed.
+
 \section{Equipment and Materials} \label{ssec:mat_data}
 
 \subsection{Printer Setup} \label{ssec:printer}
@@ -201,13 +237,41 @@ Finally, the 245°C PLA prints faced the same issues seen with ABS at 245°C: th
 	\label{tab:data_ex_temp_2}
 \end{table}
 
-An important observation that can be derived from these experiments is that the data does not fully agree with the Melt Filled Nozzle model proposed by Bellini, Güçeri and Bertoldi \cite{Bellini2004}, nor the Melt Film Model with shear thinning behavior, as modified by Colón et al. \cite{ColonQuintana2020}. Unfortunately, the physical limitations of the setup do not allow for experimentations at higher temperatures or printing speeds, as the drive wheel of the printer would slip, or the heater in the printer would not be able to sustain the elevated temperature while printing. Figure \ref{} shows how the data for a representative case of ABS printed at 230°C compares to the predictions of the Melt Filled Nozzle (FNM) and Melt Film (MFM) models \cite{Bellini2004, OsswaldMelting18, ColonQuintana2020}. ABS printed at 230°C was chosen for this comparison as it proved to be the most consistent condition in all replications of the experiment. The Melt Film model estimations were calculated using two different melting temperatures ($T_m$): the glass transition temperature of the polymer ($T_g$) and $T_g+40K$, as recommended by Colón et al. during his calculations \cite{ColonQuintana2020}. 
+An important observation that can be derived from these experiments is that the data does not fully agree with the Melt Filled Nozzle model proposed by Bellini, Güçeri and Bertoldi \cite{Bellini2004}, nor the Melt Film Model with shear thinning behavior, as modified by Colón et al. \cite{ColonQuintana2020}. Unfortunately, the physical limitations of the setup do not allow for experimentations at higher temperatures or printing speeds, as the drive wheel of the printer would slip, or the heater in the printer would not be able to sustain the elevated temperature while printing. Figure \ref{fig:meltmcomp} shows how the data for a representative case of ABS printed at 230°C compares to the predictions of the Melt Filled Nozzle (FNM) and Melt Film (MFM) models \cite{Bellini2004, OsswaldMelting18, ColonQuintana2020}. ABS printed at 230°C was chosen for this comparison as it proved to be the most consistent condition in all replications of the experiment. The Melt Film model estimations were calculated using two different melting temperatures ($T_m$): the glass transition temperature of the polymer ($T_g$) and $T_g+40K$, as recommended by Colón et al. during his calculations \cite{ColonQuintana2020}. This was done since ABS is an amorphous polymer and it does not have a sharp solid-melt transition point as in the case of semi-crystalline polymeric materials. This last point represents a pain point for this model, as the equations favor sharp melt transitions. Note how the data approximates in magnitude the MF calculations using a $T_m$ of 145°C. On the other hand, the FN model fails to capture the observed behavior in both trend and magnitude. For more details pertaining to how each model estimation was calculated, please refer to the manuscript by Colón et al., where the MG94 ABS material was used to derive the parameters necessary to fit each model \cite{ColonQuintana2020}. Material properties used for the calculations are shown in Table \ref{tab:mat_prop_models_1}, including the power law model parameters necessary to approximate the shear thinning behavior of the material \cite{ColonQuintana2020}.
 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=\linewidth, keepaspectratio]{meltcomp}
 	\caption{Comparison of experimental data for ABS printed at 230°C with predictions stemming from various ME melting models.} \label{fig:meltmcomp}
 \end{figure}
+
+\begin{table}[!htbp] 
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Material properties for ABS MG94 \cite{ColonQuintana2020}.}
+	\newcolumntype{C}{ >{\centering\arraybackslash} m{0.25\linewidth} }
+	\newcolumntype{M}{ >{\centering\arraybackslash} m{0.15\linewidth} }
+	\begin{tabular}{C C} 
+		\toprule
+		\textbf{Material Property} & \textbf{Value}\\
+		\midrule
+		Melt density & 954 $kg/m^3$\\
+		Solid density & 1060 $kg/m^3$\\
+		Specific heat & 1381 $J/kg-K$\\
+		Thermal conductivity & 0.17 $W/m-K$\\
+		Heat of fusion & 0 $J/kg$\\
+		\midrule
+		$m$ & $4.977x10^{4} Pa - s$\\
+		$n$ & $0.2847$\\
+		\bottomrule
+	\end{tabular}
+	\label{tab:mat_prop_models_1}
+\end{table}
+
+\section{Conclusions}
+
+The experiments presented in this study show that a lot is still not fully understood regarding the underlying physics of the ME process. The differences in behavior shown between the ABS and PLA filaments prove that each material needs to be studied in a case-by-case basis to optimize part build time through maximization of print speed. Using the 230°C printing temperature of this study as an example, ABS can achieve approximately 0.5 mm/s of extra filament print speed at comparable printing conditions for the PLA material, even though their complex viscosities are comparable. Additionally, the trends observed in the data do not fully match any of the more renowned melting models available in literature. However, additional testing is necessary given that higher print temperatures and printing forces could not be achieved due to the limitations of the setup. Future work involving a different filament feeding mechanism, and longer and more potent heating sections within the printhead could lead to more comprehensive force-velocity curves. Additionally, these trials involved “best case scenario” prints that circumvent accelerations, decelerations, and filament retractions — all of which occur in real prints and potentially have tangible implications upon the behavior of the material. 
+Ultimately a setup similar to the one used here could not only be used to properly calibrate a print to minimize part build time, but also predict other characteristics, such as mass throughput or even final part properties using resources such as machine learning algorithms. Other potential applications include development of smart systems that can auto correct or cancel failing prints according to the real-time monitoring of the filament speed and applied force.
 
 % Nomenclature introduced in this chapter:
 \nomenclature[A]{ME}{Material Extrusion}% 
