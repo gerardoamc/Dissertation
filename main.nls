@@ -9,9 +9,11 @@
   \item [{FC}]\begingroup Failure Criterion\nomeqref {0}\nompageref{3}
   \item [{FDM}]\begingroup Fused Deposition Modeling\texttrademark\nomeqref {0}\nompageref{3}
   \item [{FFF}]\begingroup Fused Filament Fabrication\nomeqref {0}\nompageref{3}
+  \item [{FNM}]\begingroup Melt Filled Nozzle Model\nomeqref {3.4}\nompageref{41}
   \item [{GKC}]\begingroup Gol'denblat-Kopnov Criterion\nomeqref {1.5}\nompageref{21}
   \item [{MAE}]\begingroup Mean Absolute Error\nomeqref {1.5}\nompageref{21}
-  \item [{ME}]\begingroup Material Extrusion\nomeqref {2.0}\nompageref{27}
+  \item [{ME}]\begingroup Material Extrusion\nomeqref {3.4}\nompageref{41}
+  \item [{MFM}]\begingroup Melt Film Model\nomeqref {3.4}\nompageref{41}
   \item [{MJF}]\begingroup Multi-Jet Fusion\nomeqref {1.5}\nompageref{21}
   \item [{ML}]\begingroup Machine Learning\nomeqref {1.5}\nompageref{21}
   \item [{MSE}]\begingroup Mean Square Error\nomeqref {1.5}\nompageref{21}
