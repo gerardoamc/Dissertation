@@ -20,7 +20,7 @@ In order to experimentally validate the results of the failure surface, combined
 
 Using this type of loading condition, the results can be converted to the principal coordinate system by using the following transformation:
 
-\begin{equation}
+\begin{equation} \label{eq:comp_matrix}
 	\left\{\begin{matrix}\sigma_{11}\\\sigma_{22}\\\tau_{12}\\\end{matrix}\right\}=\left[\begin{matrix}\cos^2{\theta}&\sin^2{\theta}&2.\cos{\theta.\sin{\theta}}\\\sin^2{\theta}&\cos^2{\theta}&-2.\cos{\theta.\sin{\theta}}\\-\cos{\theta.\sin{\theta}}&\cos{\theta.\sin{\theta}}&\cos^2{\theta-\sin^2{\theta}}\\\end{matrix}\right]\left\{\begin{matrix}\sigma_{xx}\\0\\0\\\end{matrix}\right\}
 \end{equation}
 
@@ -51,6 +51,16 @@ The toolpath of tensile coupons was generated using the SciSlice engine \cite{Va
 	\label{tab:printparam_ssic}
 \end{table}
 
-Mechanical tests were conducted on an Instron 5967 dual column universal testing machine with a 30 kN load cell, using the recommended testing speed of $5\ mm/min$, dictated by the ASTM standard \cite{ASTMD638}. All of the data acquisition was handled through the accompanying Instron Bluehill 3 software. 
+Mechanical tests were conducted on an Instron 5967 dual column universal testing machine with a 30 kN load cell, using the recommended testing speed of $5\ mm/min$, dictated by the ASTM standard \cite{ASTMD638}. All of the data acquisition was handled through the accompanying Instron Bluehill 3 software. The resulting experimental data was compared to the original failure envelope developed by the authors in previous work. To better visualize the results, the original mathematical formula, expressed in terms of stresses in the local coordinate system of the polymer beads, was translated into the global coordinate system. The transformation involves using the relation shown in Equation \ref{eq:comp_matrix}, resulting in the following system of equations. Solving for $\sigma_{xx}$ allows the failure surface to be expressed as a function of the raster angle and the tensorial components. 
+
+\begin{equation}
+	\sigma_{11}=\sigma_{xx}.{\cos{\left(\theta\right)}}^2;\ \ \sigma_{22}=\sigma_{xx}.{\sin{\left(\theta\right)}}^2;\ \tau_{12}=-\sigma_{xx}.\cos{\theta.\sin{\theta}}
+\end{equation}
+
+\begin{equation}
+	\begin{split}
+		1=F_{11}\sigma_{11}+F_{22}\sigma_{22}+F_{12}\tau_{12}\\ +\left(F_{1111}\sigma_{11}^2+F_{2222}\sigma_{22}^2+F_{1212}\tau_{12}^2+2F_{1122}\sigma_{11}\sigma_{22}+2F_{1112}\sigma_{11}\tau_{12}+2F_{2212}\sigma_{22}\tau_{12}\right)^{1/2}
+	\end{split}
+\end{equation}
 
 \end{document}
