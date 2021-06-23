@@ -1,13 +1,17 @@
 % proposal.tex
 \documentclass[main.tex]{subfiles}
 \begin{document}
-\chapter{Machine Learning Techniques} \label{ch:ml}
+\chapter{Prediction of Mechanical Properties through Machine Learning} \label{ch:ml}
 
-The use of AM technologies to produce small batches of highly customized, complex parts, in a reduced development cycle results extremely attractive. While constructing failure envelopes can help overcome the wariness of industrial segments to design end-user parts, this resource is still not easy to implement, requiring a large number of mechanical tests and specialized equipment to properly map the failure behavior of a particular material. Additional complexity stems from what was shown in Chapter \ref{ch:oocrit}: processing the same material under related AM technologies yields completely different failure envelopes, implying that no generalizations should be made, and each material-process pairing needs to be studied on a case-by-case basis. In general, for AM parts to be adopted, engineers have to be able to confidently assess the probability of part failure under particular loading conditions, predict the expected mechanical properties of AM parts, and understand the underlying physics of the process. None of these conditions are completely met at the time of this work.
+\section{Foreword} \label{sec:fw_ml}
 
-This work aims to provide the tools required to understand and predict mechanical performance of parts manufactured through FFF through the use of Machine Learning technologies (ML), based on process variables measured during a print using an FFF printer modified with sensors. Additionally, some, if not all of the procedures developed in this work could be extrapolated to other AM techniques.
+The use of AM technologies to produce small batches of highly customized, complex parts in a reduced development cycle results extremely attractive to all industries. However, for AM parts to be fully adopted in industrial scenarios, engineers have to be able to confidently assess the structural integrity of the finished part under its intended loading conditions. This requirement is unfortunately not fully possible at the time this work was produced, partly because the mechanical properties of AM tend to be anisotropic, and partly because the relationships that exist between processing parameters, underlying physics of the process, and final mechanical part properties aren't fully comprehended. However, these obstacles present an interesting case for the application of Machine Learning (ML) techniques, where the inputs and outputs of a particular phenomenon are known, but there's a lack of explicit rules that indicate a relationship between the two. 
 
-\section{Objectives} \label{sec:objectives}
+This work uses the Fused Filament Fabrication (FFF) process as a case study for the application of ML techniques to predict the final mechanical properties of a printed part. Experimental work involved producing a variety of tensile coupons, developed under various printing conditions, and where the filament extrusion speed, filament extrusion force, and printing temperature were measured in real time using a machine fitted with in-line sensors. These specimens were then tested up to tensile failure, and the collective data of printing parameters, measured process indicators, and mechanical tests results were used to train a Neural Network capable of predicting the tensile failure stress.
+
+In the context of this dissertation, this represents an alternative method for part failure prediction to construction and evaluation of a failure envelope. However, it should be noted that both methods are not mutually exclusive, and as will be discussed under future work, the author believes they can be combined quite well. 
+
+\section{Introduction} \label{sec:ml_intr}
 
 The set of printing conditions that lead to an optimal part in terms of mechanical properties aren't still fully comprehended. However, if there existed an FFF machine with in-line sensors that allowed monitoring a variety of process-variables, as well as data generated from mechanical tests and ancillary experiments, this would constitute an interesting case for development of a Machine Learning (ML) system. These excel in cases where the inputs and outcomes of a particular phenomena or task are known, but connecting the two through an explicit set of rules or relationships can result extremely complex and time consuming \cite{Chollet2018}. In this manner, ML models are \emph{trained}, as opposed to explicitly programmed, as illustrated in Figure \ref{fig:MLvsP}, where the differences between ML and traditional programming philosophies are compared. 
 
@@ -33,7 +37,7 @@ Given the factors outlined this far, the fundamental goal of this research is to
 	\caption{Taxonomy of ML applications in AM \cite{Meng2020}} \label{fig:supL}
 \end{figure}
 
-\section{Preliminary results} \label{sec:prelim}
+\section{Experimental Methods} \label{sec:ml_meth}
 
 Machine learning systems require both input and output data for training and validation. Preliminary work for this study has been aimed at providing the means to supply the input piece of the puzzle. In this manner, a 3D Printer capable of capturing filament force and extrusion velocity mid-print was developed in collaboration with the company FusedForm (Bogot\'{a}, Colombia) based on their simplest commercially available product: the FusedForm Minilab. The printer was equipped with a customized force sensor and a thermistor built into the printhead, as well as an encoder that records the extruded filament length through time. The concentric force sensor was positioned just above the hot end in a bowden extruder architecture. These modifications permit recording and visualization of live force, speed, and temperature data during the printing process, while maintaining the original performance and functionality of the 3D printer intact. The generated data is then collected using an Arduino board connected to MATLAB for visualization, processing and logging. A schematic representation of the machine can be seen in Figure \ref{fig:shakira}, where dashed lines represent the path followed by the filament, and the dotted lines represent the signal sent to the Arduino board.
 
@@ -75,7 +79,7 @@ An interesting unexpected outcome of this set of preliminary experiments is that
 	\caption{Potential explanation for extrusion force-velocity trends} \label{fig:meltmodes}
 \end{figure}
 
-\section{Future work} \label{sec:fw}
+\section{Results} \label{sec:ml_res}
 
 The following sections describe and summarize the future research direction based on the preliminary outcomes presented in this work. 
 
