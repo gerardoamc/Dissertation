@@ -39,15 +39,11 @@ Given the factors outlined this far, the fundamental goal of this research is to
 
 \section{Experimental Methods} \label{sec:ml_meth}
 
-Machine learning systems require both input and output data for training and validation. Preliminary work for this study has been aimed at providing the means to supply the input piece of the puzzle. In this manner, a 3D Printer capable of capturing filament force and extrusion velocity mid-print was developed in collaboration with the company FusedForm (Bogot\'{a}, Colombia) based on their simplest commercially available product: the FusedForm Minilab. The printer was equipped with a customized force sensor and a thermistor built into the printhead, as well as an encoder that records the extruded filament length through time. The concentric force sensor was positioned just above the hot end in a bowden extruder architecture. These modifications permit recording and visualization of live force, speed, and temperature data during the printing process, while maintaining the original performance and functionality of the 3D printer intact. The generated data is then collected using an Arduino board connected to MATLAB for visualization, processing and logging. A schematic representation of the machine can be seen in Figure \ref{fig:shakira}, where dashed lines represent the path followed by the filament, and the dotted lines represent the signal sent to the Arduino board.
-
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[height=7cm]{forcesetup}
 	\caption{Schematic of modified FFF printer with sensors} \label{fig:shakira}
 \end{figure}
-
-An initial set of experiments, designed to capture trends in filament force and velocity during a controlled print was designed. Two materials were chosen: a customized ABS filament, extruded in-house, and a commercially available PLA filament, each with a diameter of 1.75 mm. The ABS filament was produced using the SABIC Cycolac™ MG94 material. This is an ABS resin traditionally used for injection molding thin walled parts, as well as FFF filament. With a reported Melt Flow Index of 11.7 g/10 min, it is an ideal resin for both the FFF and extrusion processes \cite{sabic2016}. The extrusion setup consisted of a single screw extruder (Extrudex EDN 45X30D, Germany) with 45 mm screw diameter and L/D ratio of 30D. The hot melt was extruded at 205 ºC through a circular die with a 4.2 mm diameter. It was then guided through a pre-skinner into a vacuum-assisted, heated water bath (Conair, USA) to cool the extrudate whilst minimizing void formation. The solidified filament then passes through a 3-axis laser micrometer (LaserLinc, USA) and a belt puller (Conair, USA) in a control loop that allows adjustment of the pull speed to keep the extrudate within specification. The desired filament dimensions were a diameter of 1.75 mm with a tolerance of ± 0.02 mm. The PLA filament used was the commercially available "Natural PLA PRO" filament sold by Matterhackers \cite{MH2020}, chosen to minimize the effect of colorants/additives to the composition of the filament. Steps were taken to ensure that all the acquired spools of material came from the same lot as to guarantee that processing conditions during the extrusion process were constant. A laser micrometer was used to extract information pertaining to filament geometry, as seen in Figure \ref{fig:FD}.
 
 \begin{figure}[!htbp]
 	\center
@@ -55,33 +51,17 @@ An initial set of experiments, designed to capture trends in filament force and 
 	\caption{Filament geometry information, acquired through a laser micrometer } \label{fig:FD}
 \end{figure}
 
-In order to explore the effect of printing temperature and print speed upon stable printing conditions in terms of required filament force, several toolpath files were developed, where the print velocity varied was varied in increments of 5 mm/s every 15 layers, each with a thickness of 0.35 mm. To minimize the effects of varying accelerations during the test, a cylindrical geometry with a radius of 75 mm, printed in continuous helical mode was chosen as the benchmark part. This ensures that changes in filament force and velocity stem mostly from the extrusion process and not due to toolpath considerations, such as accelerations/decelerations in the X-Y plane. To verify the effect of print temperature upon the required extrusion force, each material was printed at three different temperatures: 200, 215 and 230°C for PLA, and 215, 230 and 245°C for ABS. A schematic of the print can be seen in Figure \ref{fig:cyl}.
-
-\begin{figure}[!htbp]
+\begin{figure}[h]
 	\center
-	\includegraphics[width=0.6\linewidth]{cyl_shakira}
-	\caption{Continuous print for force-velocity data collection} \label{fig:cyl}
+	\subfloat[Effect of Diameter on measured filament speed \label{fig:D_sp}]{%
+		\includegraphics[width=0.9\linewidth, keepaspectratio]{speed-OD}
+	}
+	\linebreak
+	\subfloat[Effect of Diameter on measured filament force \label{fig:D_f}]{%
+		\includegraphics[width=0.9\linewidth, keepaspectratio]{force-OD}
+	}
+	\caption{Effect of diameter on filament force and speed} \label{fig:dia_f_sp}
 \end{figure}
-
-Preliminary results show that the physical limitation of the setup lies between 20 and 25 N of force acting upon the filament. At this level of force, slippage occurs in the drive wheel mechanism that drives the material towards the nozzle.  Increases in the hot-end temperature resulted in lower force requirements to achieve elevated printing speeds, in accordance to previous research by Go and Hart, and Go \emph{et al.} in 2017 \cite{Go2017a, Go2017}. A representative plot showing a comparison between the three print temperatures selected for ABS is shown in Figure \ref{fig:absprelim}. The data presents a significant number of noise and outliers. This is an issue that is in the process of being solved.
-
-An interesting unexpected outcome of this set of preliminary experiments is that the trends shown in the data do not match any of the two major FFF melting models available in literature today: the Bellini model and the Osswald model \cite{Bellini2004, OsswaldMelting18}. In all permutations, the data for low speeds suggests a behavior similar to the Bellini model, but as the force-speed pairing increases, the trend is more akin to the Osswald model. Refer to Figure \ref{fig:meltmodes} for a schematic representing the observed behavior. More research is necessary to draw more definitive conclusions.
-
-\begin{figure}[!htbp]
-	\center
-	\includegraphics[width=0.8\linewidth]{ABS_prelim.pdf}
-	\caption{Comparison of Force requirements for ABS at three print temperatures} \label{fig:absprelim}
-\end{figure}
-
-\begin{figure}[!htbp]
-	\center
-	\includegraphics[width=0.7\linewidth]{meltmodes}
-	\caption{Potential explanation for extrusion force-velocity trends} \label{fig:meltmodes}
-\end{figure}
-
-\section{Results} \label{sec:ml_res}
-
-The following sections describe and summarize the future research direction based on the preliminary outcomes presented in this work. 
 
 \subsection{Data generation and preparation}\label{ssec:datag}
 
