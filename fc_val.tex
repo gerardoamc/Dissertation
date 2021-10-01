@@ -1,7 +1,7 @@
 % fc_val.tex
 \documentclass[main.tex]{subfiles}
 \begin{document}
-\chapter{Part Structural Integrity Evaluation through FC} \label{ch:fc_val}
+\chapter{Part Structural Integrity Evaluation through Failure Criteria} \label{ch:fc_val}
 \section{Foreword}
 Fused Filament Fabrication (FFF) is arguably the most widely available Additive Manufacturing (AM) technology at the moment. Offering the possibility of producing complex geometries in a compressed product development cycle and in a plethora of materials, it has gradually started to become attractive to multiple industrial segments, slowly being implemented in diverse applications. However, the high anisotropy of parts developed through this technique renders failure prediction difficult. The proper performance of the part, or even the safety of the final user, can't be guaranteed under demanding mechanical requirements. This problem can be tackled through the development of a failure envelope that allows engineers to predict failure by using the knowledge of the stress state of the part. A previously developed failure envelope for ABS based, FFF parts by use of a criterion that incorporates stress interactions is used in this chapter to predict the structural integrity of FFF produced parts. In the context of this dissertation, the work that follows shows how one can use such envelope to predict mechanical part failure within 10\% of the real measured value, and compares how the prediction that stems from the SSIC is more accurate than those derived from simpler but more ubiquitous FC.
 
@@ -62,5 +62,36 @@ Mechanical tests were conducted on an Instron 5967 dual column universal testing
 		1=F_{11}\sigma_{11}+F_{22}\sigma_{22}+F_{12}\tau_{12}\\ +\left(F_{1111}\sigma_{11}^2+F_{2222}\sigma_{22}^2+F_{1212}\tau_{12}^2+2F_{1122}\sigma_{11}\sigma_{22}+2F_{1112}\sigma_{11}\tau_{12}+2F_{2212}\sigma_{22}\tau_{12}\right)^{1/2}
 	\end{split}
 \end{equation}
+
+\section{Results}\label{sec:results_ssic}
+
+The maximum stress registered during testing gradually decreased as a function of the angle of the beads, with the highest value belonging to the coupons with a raster orientation parallel to the load direction, and the lowest being the specimens with the beads oriented perpendicular to the direction of the tensile stress. This is in accordance to previous work on the subject, investigating the strength of FFF parts as a function of the raster orientation. The tensile strength in the 0° orientation was approximately 20\% higher than that observed for coupons produced with a 90° raster. Results are summarized in Figure \ref{fig:ssic_tens}. Error bars represent one standard deviation.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=9.5cm, keepaspectratio]{Tens_results.png}
+	\caption{Experimental results from tensile tests}
+	\label{fig:ssic_tens}
+\end{figure}
+
+Plotting the failure line determined through the SSIC delimits a safe-unsafe threshold: any stress state above the line will likely result in part failure.  For additional comparison, lines determined using the maximum stress criterion are shown, using the $X_t$, $Y_t$ and $S$ values determined for the SSIC. These are labeled $M1-1$, $M2-2$ and $M1-2$ respectively. Finally, overlaying the experimental data results in Figure \ref{fig:jcompscir}.
+
+\begin{figure}[!htbp]
+	\center
+	\subfloat[Loading \label{fig:complload}]{%
+		\includegraphics[height=9cm, keepaspectratio]{compl_load.jpg}
+	}
+	\hfill
+	\subfloat[Comparison of data and failure prediction using various FC\label{fig:compsci}]{%
+		\includegraphics[height=9cm, keepaspectratio]{FC_comp.png}
+	}
+	\caption{Results from \cite{MazzeiJCompSci}} \label{fig:jcompscir}
+\end{figure} 
+
+It can be seen from the graph that no data point trespasses into the safety zone defined by the SSIC. The maximum deviation between the SSIC line and the experimental data amounts to approximately 8.6\%, and this difference could be at least partially attributed to the variability intrinsic to reproducing the same geometry in a process like FFF. By comparison, simply using the maximum stress criterion proves inadequate, given that all the experimental tests fall well into the safe area determined by this criterion. These results give credence to the previously developed failure envelope.
+
+\section{Conclusions}\label{sec:concl_ssic}
+
+The field of Additive Manufacturing as a whole can only achieve its maximum potential once standardization is in place, and users can safely assess if the designed part will perform as expected when subjected to important stresses. This body of work shows that the application of a failure criterion for FFF parts produced under a fixed set of print parameters is possible, and that the resulting envelope adequately predicts the overall trend of the failure behavior of parts produced by this technique. Results for uniaxial mechanical tests that resulted in complex stress states in the principal directions showed that the threshold determined by the SSIC applied for FFF was appropriate. Future work can expand on the concepts presented in this work by attempting to create a failure envelope for an FFF material that has more drastic differences in tensile strengths in the 1-1 and 2-2 directions, as well as approaching the failure estimation from a probabilistic stand.
 
 \end{document}

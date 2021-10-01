@@ -7,7 +7,7 @@
 
 The use of AM technologies to produce small batches of highly customized, complex parts in a reduced development cycle results extremely attractive to all industries. However, for AM parts to be fully adopted in industrial scenarios, engineers have to be able to confidently assess the structural integrity of the finished part under its intended loading conditions. This requirement is unfortunately not fully possible at the time this work was produced, partly because the mechanical properties of AM tend to be anisotropic, and partly because the relationships that exist between processing parameters, underlying physics of the process, and final mechanical part properties aren't fully comprehended. However, these obstacles present an interesting case for the application of Machine Learning (ML) techniques, where the inputs and outputs of a particular phenomenon are known, but there's a lack of explicit rules that indicate a relationship between the two. 
 
-This work uses the Fused Filament Fabrication (FFF) process as a case study for the application of ML techniques to predict the final mechanical properties of a printed part. Experimental work involved producing a variety of tensile coupons, developed under various printing conditions, and where the filament extrusion speed, filament extrusion force, and printing temperature were measured in real time using a machine fitted with in-line sensors. These specimens were then tested up to tensile failure, and the collective data of printing parameters, measured process indicators, and mechanical tests results were used to train a Neural Network capable of predicting the tensile failure stress.
+This work uses the Fused Filament Fabrication (FFF) process as a case study for the application of ML techniques to predict the final mechanical properties of a printed part. Experimental work involved producing a variety of tensile coupons, developed under various printing conditions, and where the filament extrusion speed, filament extrusion force, and printing temperature were measured in real time using machines fitted with in-line sensors. These specimens were then tested up to tensile failure, and the collective data of printing parameters, measured process indicators, and mechanical tests results were used to train a Neural Network capable of predicting the tensile failure stress.
 
 In the context of this dissertation, this represents an alternative method for part failure prediction to construction and evaluation of a failure envelope. However, it should be noted that both methods are not mutually exclusive, and as will be discussed under future work, the author believes they can be combined quite well. 
 
@@ -18,7 +18,7 @@ The set of printing conditions that lead to an optimal part in terms of mechanic
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[height=6cm]{ML}
-	\caption{Differences between traditional programming and machine learning. \cite{Chollet2018}} \label{fig:MLvsP}
+	\caption{Differences between traditional programming and machine learning. \cite{Chollet2018}} \label{fig:MLvsP_2}
 \end{figure}
 
 The potential to apply ML solutions in the field of AM has been noted by several authors \cite{Razvi2019,Meng2020}. Example cases include design-recommendation systems, topology optimization solutions, tolerancing and manufacturability assessment, and material classification and selection \cite{Razvi2019}. The specific algorithm applied for each case varied wildly depending on the nature of the task, but in general, Support Vector Machines (SVM) and Neural Networks (NN) appear to be the most prevalent solutions.
@@ -50,11 +50,11 @@ Given the factors outlined this far, the fundamental goal of this research is to
 \begin{figure}[h]
 	\center
 	\subfloat[Effect of diameter on measured filament speed \label{fig:D_sp}]{%
-		\includegraphics[width=0.9\linewidth, keepaspectratio]{speed-OD}
+		\includegraphics[width=0.8\linewidth, keepaspectratio]{speed-OD}
 	}
 	\linebreak
 	\subfloat[Effect of diameter on measured filament force \label{fig:D_f}]{%
-		\includegraphics[width=0.9\linewidth, keepaspectratio]{force-OD}
+		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-OD}
 	}
 	\caption{Effect of diameter on filament force and speed} \label{fig:dia_f_sp}
 \end{figure}
@@ -62,11 +62,11 @@ Given the factors outlined this far, the fundamental goal of this research is to
 \begin{figure}[h]
 	\center
 	\subfloat[Effect of ovality on measured filament speed \label{fig:O_sp}]{%
-		\includegraphics[width=0.9\linewidth, keepaspectratio]{speed-ovality}
+		\includegraphics[width=0.8\linewidth, keepaspectratio]{speed-ovality}
 	}
 	\linebreak
 	\subfloat[Effect of ovality on measured filament force \label{fig:O_f}]{%
-		\includegraphics[width=0.9\linewidth, keepaspectratio]{force-ovality}
+		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-ovality}
 	}
 	\caption{Effect of diameter on filament force and speed} \label{fig:ov_f_sp}
 \end{figure}
