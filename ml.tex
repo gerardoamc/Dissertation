@@ -37,22 +37,32 @@ The capability of NNs to model complex behaviors is rooted in the mathematical o
 	\sum_{i=1}^{m} W_{i}X_{i} + bias = z
 \end{equation}  
 
-The weighed sum of the inputs is then passed through a stepping function, that triggers the activation of an output should a threshold be surpassed. Assuming for the purposes of this example that the threshold is zero, and the stepping function is the Heaviside function, the output of a neuron can be computed as:
+The weighed sum of the inputs can then be used as is, or passed through an activation function. This signals the generation of an output that can then be used at face value, or transmitted to subsequent nodes if a threshold is surpassed. Assuming for the purposes of this example that the threshold is zero, and the activation function is the Heaviside step function, the output of a neuron can be computed as:
 
 \begin{equation} \label{eq:heav}
 	Heaviside(z) = \begin{cases}
-		1, & \text{if } z \geq 1\\
-		0, & \text{otherwise}
+		1 & \text{if } z \geq 1\\
+		0 & \text{otherwise}
 	\end{cases}
 \end{equation}
 
-Finally, concatenating nodes in a forward fashion creates the concept of levels, or \emph{layers} in a network. When all neurons in a layer are fully connected to the nodes in the previous level, this is typically named a \emph{Dense} layer. Arranging more than one dense layers in series results in a NN.
+Concatenating nodes in a forward fashion creates the concept of levels, or \emph{layers} in a network. When all neurons in a layer are fully connected to the nodes in the previous level, this is typically named a \emph{Dense} layer. Arranging more than one dense layer in series results in a NN \cite{Chollet2018, Geron2019}. 
+
+The weights of each neuron are iteratively tuned in a process that involves penalizing the model using a loss function, that compares the predictions of the model with true output values using example data. This process is effectively an optimization task where the goal is to minimize the loss function. A schematic of the process can be seen in Figure \ref{fig:NN_it}, using a two layer network architecture as an example.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.7\linewidth, keepaspectratio]{weight_ML}
+	\caption{Iterative process of NN parameter tuning \cite{Chollet2018}} \label{fig:NN_it}
+\end{figure}
 
 Given the factors outlined this far, the fundamental goal of this research is to predict FFF part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. The success of this project would allow design engineers to confidently assess if a part manufactured through FFF will meet the mechanical requirements imposed by its intended application. This work proposes developing and using a modified printer with force and print speed sensors, as well as mechanical testing and $\mu$CT scans to generate data that can be used to train a predictive tool based on ML. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. This ML system would accept filament dimensions, printing temperature, filament force, filament velocity, print orientation, layer height, or any subset of these items as inputs, and produce final part porosity and/or mechanical strength in a particular load direction as outputs. These parameters were chosen based on previous work performed by Koch, Van Hulle and Rudolph \cite{Koch2017}, where the final tensile strength of FFF coupons was shown to be related to the morphology of the printed bead, which is significantly affected by processing parameters and variations in the volumetric output of the nozzle; research published by Sood \emph{et al.} \cite{Sood2012} where a NN was able to predict the compressive strength of FDM parts with an $R^2= 0.9977$ using layer thickness, raster angle, orientation, raster width, and air gap as inputs; as well as the proposed FFF melting models established by Bellini \emph{et al.} \cite{Bellini2004} and Osswald \emph{et al.} \cite{OsswaldMelting18}. 
 
 \section{Experimental Methods} \label{sec:ml_meth}
 
-\subsection{Feature Selection and Engineering} \label{ssec:ml_fs}
+%\subsection{Feature Selection and Engineering} \label{ssec:ml_fs}
+\subsection{Data generation and preparation}\label{ssec:datag}
+
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[height=7cm]{forcesetup}
@@ -94,8 +104,6 @@ Given the factors outlined this far, the fundamental goal of this research is to
 	}
 	\caption{Effect of diameter on filament force and speed} \label{fig:ov_f_sp}
 \end{figure}
-
-\subsection{Data generation and preparation}\label{ssec:datag}
 
 \subsection{ML system architecture, training, and validation}\label{ssec:MLA}
 
