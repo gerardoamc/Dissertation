@@ -7,9 +7,9 @@
 
 The use of AM technologies to produce small batches of highly customized, complex parts in a reduced development cycle results extremely attractive to all industries. However, for AM parts to be fully adopted in industrial scenarios, engineers have to be able to confidently assess the structural integrity of the finished part under its intended loading conditions. This requirement is unfortunately not fully possible at the time this work was produced, partly because the mechanical properties of AM tend to be anisotropic, and partly because the relationships that exist between processing parameters, underlying physics of the process, and final mechanical part properties aren't fully comprehended. However, these obstacles present an interesting case for the application of Machine Learning (ML) techniques, where the inputs and outputs of a particular phenomenon are known, but there's a lack of explicit rules that indicate a relationship between the two. 
 
-This work uses the Fused Filament Fabrication (FFF) process as a case study for the application of ML techniques to predict the final mechanical properties of a printed part. Experimental work involved producing a variety of tensile coupons, developed under various printing conditions, and where the filament extrusion speed, filament extrusion force, and printing temperature were measured in real time using machines fitted with in-line sensors. These specimens were then tested up to tensile failure, and the collective data of printing parameters, measured process indicators, and mechanical tests results were used to train a Neural Network capable of predicting the tensile failure stress.
+This work uses the Material Extrusion (ME) process as a case study for the application of ML techniques to predict the final mechanical properties of a printed part. Experimental work involved producing a variety of tensile coupons, developed under various printing conditions, and where the filament extrusion speed, filament extrusion force, and printing temperature were measured in real time using machines fitted with in-line sensors. These specimens were then tested up to tensile failure, and the collective data of printing parameters, measured process indicators, and mechanical tests results were used to train a Neural Network capable of predicting the tensile failure stress.
 
-In the context of this dissertation, this represents an alternative method for part failure prediction to construction and evaluation of a failure envelope. However, it should be noted that both methods are not mutually exclusive, and as will be discussed under future work, the author believes they can be combined quite well. 
+In the context of this dissertation, this represents an alternative method for part failure prediction to construction and evaluation of a failure envelope. However, it should be noted that both methods are not mutually exclusive, and as will be discussed, the author believes they can, and should, be combined1. 
 
 \section{Introduction} \label{sec:ml_intr}
 
@@ -27,7 +27,7 @@ A Neural Network (NN) algorithm is effectively a facsimile of how biological neu
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[width=0.9\linewidth, keepaspectratio]{NN_scheme}
+	\includegraphics[width=0.8\linewidth, keepaspectratio]{NN_scheme}
 	\caption{Schematic of a NN \cite{IBMCloudEducation2020}} \label{fig:NN}
 \end{figure}
 
@@ -56,30 +56,42 @@ The weights of each neuron are iteratively tuned in a process that involves pena
 	\caption{Iterative process of NN parameter tuning \cite{Chollet2018}} \label{fig:NN_it}
 \end{figure}
 
-Given the factors outlined this far, the fundamental goal of this research is to predict FFF part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. The success of this project would allow design engineers to confidently assess if a part manufactured through FFF will meet the mechanical requirements imposed by its intended application. This work proposes developing and using a modified printer with force and print speed sensors, as well as mechanical testing and $\mu$CT scans to generate data that can be used to train a predictive tool based on ML. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. This ML system would accept filament dimensions, printing temperature, filament force, filament velocity, print orientation, layer height, or any subset of these items as inputs, and produce final part porosity and/or mechanical strength in a particular load direction as outputs. These parameters were chosen based on previous work performed by Koch, Van Hulle and Rudolph \cite{Koch2017}, where the final tensile strength of FFF coupons was shown to be related to the morphology of the printed bead, which is significantly affected by processing parameters and variations in the volumetric output of the nozzle; research published by Sood \emph{et al.} \cite{Sood2012} where a NN was able to predict the compressive strength of FDM parts with an $R^2= 0.9977$ using layer thickness, raster angle, orientation, raster width, and air gap as inputs; as well as the proposed FFF melting models established by Bellini \emph{et al.} \cite{Bellini2004} and Osswald \emph{et al.} \cite{OsswaldMelting18}. 
+Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. The success of this project would allow design engineers to confidently assess if a part manufactured through ME will meet the mechanical requirements imposed by its intended application. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height (LH), Nozzle Diameter (ND), and Print Speed (PS). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons.
 
 \section{Experimental Methods} \label{sec:ml_meth}
 
 %\subsection{Feature Selection and Engineering} \label{ssec:ml_fs}
-\subsection{Data generation and preparation}\label{ssec:datag}
+\subsection{Equipment and methods}\label{ssec:datag}
+
+A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) fitted with sensors capable of recording the force exerted by the filament upon the nozzle, discrete measurements of temperature, and changes in the extruded length over time were used to reproduce a variety of tensile coupons. A schematic of the printer setup can be seen in Figure 
+\ref{fig:print_setup}. The data was collected using an Arduino board sampling at a frequency of 5 Hz, connected to MATLAB for visualization, processing, and logging. A Buttersworth filter was applied to amplify the signal-to-noise ratio of the outputs of the system. The code for the data acquisition and filtering can be found in Appendices \ref{ch:com} and \ref{ch:daq}.
 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[height=7cm]{forcesetup}
-	\caption{Schematic of modified FFF printer with sensors} \label{fig:shakira}
+	\caption{Schematic of modified ME printer with sensors} \label{fig:print_setup}
 \end{figure}
+
+Each print consisted of four rectangular tensile coupons of dimensions $25 \text{ mm}$ by $100 \text{ mm}$ by $3.2 \text{ mm}$, chosen to strike a balance between being relatively quick to print, having at least $50\text{ mm}$ of gauge length, and fitting in the jaws of the tensile testing equipment. Each coupon was printed in a part-by-part manner (as opposed to having a single layer of the print construct a slice of all coupons), to approximate real printing behavior as much as possible. 
+
+A single experimental run yielded four replicates, which required post-processing to separate the force-data-speed pairings for each specimen. A pause was introduced between each part that would allow discerning when one specimen print was finished, and the next started. A schematic of the process is shown in Figure \ref{fig:print_dia}. 
+
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[height=8cm]{coupon_print_diagram}
+	\includegraphics[height=6cm]{coupon_print_diagram}
 	\caption{Schematic of print experiment} \label{fig:print_dia}
 \end{figure}
+
+Additionally as an exploratory experiment, the geometric information of the filament was collected and paired to the rest of the information stemming from the in-line measurements of a handful of prints, to assess if variations in the filament geometry resulted in notable changes in the required print force. This data was attained through the use of a laser micrometer and a conveyor belt, pulling the material at a constant, known speed. The process yielded discrete measurements of the filament diameter and ovality as a function of filament length and time. A schematic of the process can be seen in Figure \ref{fig:FD}.  
 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.6\linewidth]{filament_measurement}
 	\caption{Filament geometry information, acquired through a laser micrometer } \label{fig:FD}
 \end{figure}
+
+Finally, tensile testing was performed using an Instron 5967 dual column universal testing machine, fitted with a 30 kN load cell. All data acquisition was handled through the accompanying Instron Bluehill 3 software. A movement speed of 5 mm/min was used to deform the 50 mm gage section of the specimens, with all deformations being logged using an extensometer. To protect the samples from excessive gripping force, emery cloth tabs were used \cite{Capote2017}. 
 
 \begin{figure}[h]
 	\center
