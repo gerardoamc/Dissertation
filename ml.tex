@@ -13,7 +13,7 @@ In the context of this dissertation, this represents an alternative method for p
 
 \section{Introduction} \label{sec:ml_intr}
 
-The set of printing conditions that lead to an optimal part in terms of mechanical properties are not fully comprehended due to the nuances associated with the interacting effects of the processing conditions, material behavior, paired with a commonplace lack of standardization in the field of AM as a whole. However, recent advancements in processing power and algorithms have made it easier than ever to deploy Machine Learning (ML) solutions, and the intricacies of the processing-properties relationships of AM techniques represent an interesting case for development of a ML system. These excel in cases where the inputs and outcomes of a particular phenomena or task are known, but connecting the two through an explicit set of rules or relationships can result extremely complex and time consuming \cite{Chollet2018}. In this manner, ML models are \emph{trained}, as opposed to explicitly programmed, as illustrated in Figure \ref{fig:MLvsP}, where the differences between ML and traditional programming philosophies are compared. 
+The set of printing conditions that lead to an optimal part in terms of mechanical properties are not fully comprehended due to the nuances associated with the interacting effects of the processing conditions, material behavior, paired with a commonplace lack of standardization in the field of AM as a whole. However, recent advancements in processing power and algorithms have made it easier than ever to deploy Machine Learning (ML) solutions, and the intricacies of the processing-properties relationships of AM techniques represent an interesting case for development of a ML system. These excel in cases where the inputs and outcomes of a particular phenomena or task are known, but connecting the two through an explicit set of rules or relationships can result extremely complex and time consuming \cite{Chollet2018}. In this manner, ML models are \emph{trained}, as opposed to explicitly programmed, as illustrated in Figure \ref{fig:MLvsP_2}, where the differences between ML and traditional programming philosophies are compared. 
 
 \begin{figure}[!htbp]
 	\center
@@ -55,6 +55,18 @@ The weights of each neuron are iteratively tuned in a process that involves pena
 	\includegraphics[width=0.7\linewidth, keepaspectratio]{weight_ML}
 	\caption{Iterative process of NN parameter tuning \cite{Chollet2018}} \label{fig:NN_it}
 \end{figure}
+
+Unfortunately, while NNs are powerful, highly adaptable predictive models, the contributions of each input are usually hidden behind a veil of complexity that makes it almost impossible for the user to comprehend what is happening behind the scenes \textemdash fittingly, much in the same way we do not fully understand how brains and cognition work. Luckily, recent developments in interpretability of models allow a peek inside the inner machinations of a NN, normally considered a "black box" model. Of particular interest, is the application of Shapley values to aid in the understanding of how a trained ML model is affected by each of its inputs.
+
+A Shapley value is a concept that stems from game theory. To paraphrase and over-simplify the formal definition, if a coalition $C$ collaborates to produce a value $V$, the Shapley value is simply how much each member of the coalition contributed to its final output \cite{Shapley+2016+307+318, Molnar2021}. For instance, it can determine the average contribution of each player, to the output of the team in a game; how much profit did each members of a corporation produce throughout a year; and more importantly for the contents of this work, \emph{how much is each input of a model contributing to its output}. The formal mathematical definition is computationally expensive and escapes the scope of this work, but a numerical approximation using Monte-Carlo sampling, proposed by \v{S}trumbelj et al. \cite{Strumbelj2014} states that, for any model $f$ capable of making a prediction using the vector $x$ with $M$ features as an input, the Shapely value ${\phi}_{j}$ for that particular input can be approximated as follows:
+
+\begin{equation}
+	\frac{1}{M}\sum_{m=1}^{M} (\hat{f}(x^{m}_{+j})-\hat{f}(x^{m}_{-j})) = \hat{\phi}_{j}
+\end{equation}
+
+Where $\hat{f}(x^{m}_{+j})$ and $\hat{f}(x^{m}_{-j})$ represent predictions made by the model using two synthetic datapoints, constructed using a random entry from the database, called $z$. The former term is the instance of interest, but all values in the order after feature $j$ are replaced by feature values from the sample $z$. Similarly, the latter term, $\hat{f}(x^{m}_{-j})$ is constructed in the same manner as $\hat{f}(x^{m}_{+j})$, but it also replaces feature $j$ by its counterpart from datapoint $z$ \cite{Molnar2021}. 
+
+Finally, to facilitate its applicability to ML, Lundberg and Lee created the SHAP (Shapley Additive Explanations) method to explain individual predictions. The SHAP method effectively models "any explanation of a model's prediction as a model itself", termed an \emph{explanation model} \cite{NIPS2017_8a20a862}.
 
 Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height (LH), Nozzle Diameter (ND), and Print Speed (PS). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons.
 
@@ -128,7 +140,8 @@ The following step of this work would involve using small subsets of the trainin
 \nomenclature[A]{NN}{Neural Network}%
 \nomenclature[A]{MSE}{Mean Square Error}%
 \nomenclature[A]{MAE}{Mean Absolute Error}%
+\nomenclature[A]{SHAP}{Shapley Additive Explanations}%
 
 % Symbols introduced in this chapter:
-%\nomenclature[S]{$X_t$}{Tensile strength in the 1-1 direction \nomunit{$MPa$}}
+\nomenclature[S]{$\phi_{j}$}{Shapley Value}
 \end{document}
