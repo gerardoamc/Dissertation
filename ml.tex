@@ -60,17 +60,49 @@ Unfortunately, while NNs are powerful, highly adaptable predictive models, the c
 
 A Shapley value is a concept that stems from game theory. To paraphrase and over-simplify the formal definition, if a coalition $C$ collaborates to produce a value $V$, the Shapley value is simply how much each member of the coalition contributed to its final output \cite{Shapley+2016+307+318, Molnar2021}. For instance, it can determine the average contribution of each player, to the output of the team in a game; how much profit did each members of a corporation produce throughout a year; and more importantly for the contents of this work, \emph{how much is each input of a model contributing to its output}. The formal mathematical definition is computationally expensive and escapes the scope of this work, but a numerical approximation using Monte-Carlo sampling, proposed by \v{S}trumbelj et al. \cite{Strumbelj2014} states that, for any model $f$ capable of making a prediction using the vector $x$ with $M$ features as an input, the Shapely value ${\phi}_{j}$ for that particular input can be approximated as follows:
 
-\begin{equation}
+\begin{equation} \label{eq:shap_MC}
 	\frac{1}{M}\sum_{m=1}^{M} (\hat{f}(x^{m}_{+j})-\hat{f}(x^{m}_{-j})) = \hat{\phi}_{j}
 \end{equation}
 
 Where $\hat{f}(x^{m}_{+j})$ and $\hat{f}(x^{m}_{-j})$ represent predictions made by the model using two synthetic datapoints, constructed using a random entry from the database, called $z$. The former term is the instance of interest, but all values in the order after feature $j$ are replaced by feature values from the sample $z$. Similarly, the latter term, $\hat{f}(x^{m}_{-j})$ is constructed in the same manner as $\hat{f}(x^{m}_{+j})$, but it also replaces feature $j$ by its counterpart from datapoint $z$ \cite{Molnar2021}. 
 
-Finally, to facilitate its applicability to ML, Lundberg and Lee created the SHAP (Shapley Additive Explanations) method to explain individual predictions. The SHAP method effectively models "any explanation of a model's prediction as a model itself", termed an \emph{explanation model} \cite{NIPS2017_8a20a862}.
+To facilitate its applicability to ML, Lundberg and Lee created the SHAP (Shapley Additive Explanations) method to explain individual predictions. The SHAP method effectively models "any explanation of a model's prediction as a model itself", termed an \emph{explanation model} \cite{NIPS2017_8a20a862}. Thus, any model $f$ can be approximated using an explanation model $g$ using the equation below, where $z'$ represents a simplified version version of input $z$, such that $z = h_{x}(z')$:
 
-Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by finding relations between processing conditions and strength through the use of sensors and machine learning. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height (LH), Nozzle Diameter (ND), and Print Speed (PS). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons.
+\begin{equation}
+	g(z')\approx f(h_{x}(z'))
+\end{equation}
+
+Finally, for the purposes of SHAP, the explanation model of choice has each effect $\phi_{i}$ attributed to a feature, and the sum of the effects of all feature attributions approximates the outputs of the original model $f$. This explanation model is represented by the equation below.
+
+\begin{equation} \label{eq:SHAP}
+	g(z') = \phi_{0} + \sum_{m=1}^{M} \phi_{i}z_{i}^{'}
+\end{equation}
+
+Using Equations \ref{eq:shap_MC} and \ref{eq:SHAP}, one can use Shapley values to identify the importance of features in a respective model. This allows the user to make decision pertaining to the architecture of the model, as well as appreciating the impact a particular input can have on the output of the model \textemdash something that would be difficult to do without this resource. These mathematical principles are built into the SHAP Python library out of the box \cite{NIPS2017_8a20a862}.
+
+Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by training a NN with data generated through the use of sensors built into a 3D printer. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height (LH), Nozzle Diameter (ND), and Print Speed (PS). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons. The models produced through this research will be analyzed using Shapley values through the SHAP method to draw conclusions regarding the impact of the selected features of the model.
 
 \section{Experimental Methods} \label{sec:ml_meth}
+
+\subsection{Design of Experiments}\label{ssec:doe}
+
+The target values of the predictive NN are the required average extrusion force ($F$) for the print, Tensile Strength of the coupon ($\sigma_{t}$), and the Elastic Modulus of the sample ($E$). In order to capture a variety of printing conditions, the selected controlled variables were varied in a three level, full-factorial experimental layout, which can be seen in Table \ref{tab:ml_doe}. Each printing condition was replicated 2 times to account for variability in the samples, and the experiments were reproduced using both a $0^{\circ}$ and $90^{\circ}$ orientation.
+
+\begin{table}[!htbp] %Fixates table so that it doesn't randomly jump around between pages
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Controlled variables in the Design of Experiments}
+	\begin{tabular}{ c c } 
+		\toprule
+		\textbf{Variable} & \textbf{Levels} \\
+		\midrule
+		 Layer Height (LH) [$mm$]  &  0.1, 0.2, 0.4\\
+		 Nozzle Diameter ($D_{N}$) [$mm$] & 0.3, 0.4, 0.8\\
+		 Print Speed (PS) [$mm/min$] & 1200, 2400, 3600\\
+		\bottomrule
+	\end{tabular}
+	\label{tab:ml_doe}
+\end{table}
 
 \subsection{Equipment and methods}\label{ssec:datag}
 
@@ -102,7 +134,38 @@ Additionally as an exploratory experiment, the geometric information of the fila
 	\caption{Filament geometry information, acquired through a laser micrometer } \label{fig:FD}
 \end{figure}
 
-Tensile testing was performed using an Instron 5967 dual column universal testing machine, fitted with a 30 kN load cell. All data acquisition was handled through the accompanying Instron Bluehill 3 software. A movement speed of 5 mm/min was used to deform the 50 mm gage section of the specimens, with all deformations being logged using an extensometer. To protect the samples from excessive gripping force, emery cloth tabs were used \cite{Capote2017}. The final step of the process involved matching the printing data to its corresponding mechanical test results, and assembling everything in a single database. This was done using a Python code that would search the directory of the raw data and construct a \emph{.csv} file including all the pertaining information of an experimental run in a row. This step is necessary for the ML code to quickly read and understand the information that it is attempting to model. This code can be found in Appendix \ref{ch:csv}. 
+Tensile testing was performed using an Instron 5967 dual column universal testing machine, fitted with a 30 kN load cell. All data acquisition was handled through the accompanying Instron Bluehill 3 software. A movement speed of 5 mm/min was used to deform the 50 mm gage section of the specimens, with all deformations being logged using an extensometer. To protect the samples from excessive gripping force, emery cloth tabs were used \cite{Capote2017}. This setup can be seen in Figure \ref{fig:testsetup}. The final step of the process involved matching the printing data to its corresponding mechanical test results, and assembling everything in a single database. This was done using a Python code that would search the directory of the raw data and construct a \emph{.csv} file including all the pertaining information of an experimental run in a row. This step is necessary for the ML code to quickly read and understand the information that it is attempting to model. This code can be found in Appendix \ref{ch:csv}. 
+
+\begin{figure}[h]
+	\center
+	\includegraphics[height=7cm, keepaspectratio]{tensgrip}
+	\caption{Tensile testing setup} \label{fig:testsetup}
+\end{figure} 
+
+An additional metric that can aid in identifying underlying systematic issues or relationships between the print and its mechanical properties is comparing the expected filament speed against its experimentally measured counterpart. The theoretical filament speed can be calculated using a simple volumetric balance. The volume of an extruded bead can be approximated as $ND. D_{N}. l$, where $l$ represents the bead length. Given that mass must be conserved, this implies that the volume of the bead $V_{out}$ must be equal to the volume supplied by the incoming filament $V_{in}$ resulting in the equation below, where $D_{f}$ and $L$ represent the filament diameter and length supplied to extrude the bead respectively:
+
+\begin{equation} \label{eq:v_b_1}
+	V_{out}= LH . D_{N} . l = V_{in} = \frac{\pi . D_{f}^2 . L}{4}
+\end{equation}
+
+Manipulating Equation \ref{eq:v_b_1} to solve for $L$ results in:
+
+\begin{equation} \label{eq:v_b_2}
+	L = \frac{LH. D_{N}. l. 4}{\pi . D_{f}^2}
+\end{equation}
+
+Now, one can use the expected time to print a bead of dimensions $l$ to solve for the expected print speed $S_{t}$.
+
+\begin{equation} \label{eq:v_b_3}
+	t = \frac{l. 60 s}{PS}
+\end{equation}
+
+Finally, combining Equations \ref{eq:v_b_2} and \ref{eq:v_b_3} yields the theoretical filament speed, $S_{t}$. The equation includes a conversion factor to solve in units of $mm/s$.
+
+\begin{equation} \label{eq:v_b_4}
+	S_{t}=\frac{4. LH. D_{N}. PS}{\pi . D^2 . 60s}
+\end{equation}
+
 
 \begin{figure}[h]
 	\center
@@ -125,7 +188,7 @@ Tensile testing was performed using an Instron 5967 dual column universal testin
 	\subfloat[Effect of ovality on measured filament force \label{fig:O_f}]{%
 		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-ovality}
 	}
-	\caption{Effect of diameter on filament force and speed} \label{fig:ov_f_sp}
+	\caption{Effect of ovality on filament force and speed} \label{fig:ov_f_sp}
 \end{figure}
 
 \subsection{ML system architecture, training, and validation}\label{ssec:MLA}
