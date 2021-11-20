@@ -46,6 +46,7 @@ The weighed sum of the inputs can then be used as is, or passed through an activ
 	\end{cases}
 \end{equation}
 
+
 Concatenating nodes in a forward fashion creates the concept of levels, or \emph{layers} in a network. When all neurons in a layer are fully connected to the nodes in the previous level, this is typically named a \emph{Dense} layer. Arranging more than one dense layer in series results in a NN \cite{Chollet2018, Geron2019}. 
 
 The weights of each neuron are iteratively tuned in a process that involves penalizing the model using a loss function, that compares the predictions of the model with true output values using example data. This process is effectively an optimization task where the goal is to minimize the loss function. A schematic of the process can be seen in Figure \ref{fig:NN_it}, using a two layer network architecture as an example.
@@ -86,7 +87,7 @@ Given the factors outlined this far, the fundamental goal of this research is to
 
 \subsection{Design of Experiments}\label{ssec:doe}
 
-The target values of the predictive NN are the required average extrusion force ($F$) for the print, Tensile Strength of the coupon ($\sigma_{t}$), and the Elastic Modulus of the sample ($E$). In order to capture a variety of printing conditions, the selected controlled variables were varied in a three level, full-factorial experimental layout, which can be seen in Table \ref{tab:ml_doe}. Each printing condition was replicated 2 times to account for variability in the samples, and the experiments were reproduced using both a $0^{\circ}$ and $90^{\circ}$ orientation.
+The target values of the predictive NN are the required average extrusion force ($F$) for the print, Tensile Strength of the coupon ($\sigma_{t}$), and the Elastic Modulus of the sample ($E$). In order to capture a variety of printing conditions, the selected controlled variables were varied in a three level, full-factorial experimental layout, which can be seen in Table \ref{tab:ml_doe}. Each printing condition was replicated 2 times to account for variability in the samples, and all combinations were reproduced using both a $0^{\circ}$ and $90^{\circ}$ orientation.
 
 \begin{table}[!htbp] %Fixates table so that it doesn't randomly jump around between pages
 	\renewcommand{\arraystretch}{1.5}
@@ -106,18 +107,17 @@ The target values of the predictive NN are the required average extrusion force 
 
 \subsection{Equipment and methods}\label{ssec:datag}
 
-A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) fitted with sensors capable of recording the force exerted by the filament upon the nozzle, discrete measurements of temperature, and changes in the extruded length over time were used to reproduce a variety of tensile coupons. A schematic of the printer setup can be seen in Figure 
-\ref{fig:print_setup}. The data was collected using an Arduino board sampling at a frequency of 5 Hz, connected to MATLAB for visualization, processing, and logging. A Buttersworth filter was applied to amplify the signal-to-noise ratio of the outputs of the system. The code for the data acquisition and filtering can be found in Appendix \ref{ch:daq}.
+A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) fitted with sensors capable of recording the force exerted by the filament upon the nozzle, discrete measurements of temperature, and changes in the extruded length over time were used to reproduce a variety of tensile coupons. A schematic of the printer setup can be seen in Figure \ref{fig:print_setup}. The data was collected using an Arduino board sampling at a frequency of 5 Hz, connected to MATLAB for visualization, processing, and logging. A Buttersworth filter was applied to amplify the signal-to-noise ratio of the outputs of the system. The code for the data acquisition and filtering can be found in Appendix \ref{ch:daq}. A random set of printing conditions were reproduced on all printers to monitor printer-to-printer variability.
 
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[height=7cm]{forcesetup}
 	\caption{Schematic of modified ME printer with sensors} \label{fig:print_setup}
-\end{figure}
+\end{figure} 
 
-Each print consisted of four rectangular tensile coupons of dimensions $25 \text{ mm}$ by $100 \text{ mm}$ by $3.2 \text{ mm}$, chosen to strike a balance between being relatively quick to print, having at least $50\text{ mm}$ of gauge length, and fitting in the jaws of the tensile testing equipment. Each coupon was printed in a part-by-part manner (as opposed to having a single layer of the print construct a slice of all coupons), to approximate real printing behavior as much as possible. 
+To minimize the impact of lurking variables, the filament was extruded in-house, using the SABIC Cycolac MG94 ABS material, using an extrusion line that maintained the filament diameter within the target of $1.75 \pm 0.05 \text{ mm}$ using a vacuum assisted water bath, a laser micrometer, and a conveyor belt in a control loop. Each filament was dried for a minimum of 3 hours at $65^{\circ}C$ and kept in a drybox attached to the printer during manufacturing. 
 
-A single experimental run yielded four replicates, which required post-processing to separate the force-data-speed pairings for each specimen. A pause was introduced between each part that would allow discerning when one specimen print was finished, and the next started. A schematic of the process is shown in Figure \ref{fig:print_dia}. 
+Each print consisted of four rectangular tensile coupons of dimensions $25 \text{ mm}$ by $100 \text{ mm}$ by $3.2 \text{ mm}$, chosen to strike a balance between being relatively quick to print, having at least $50\text{ mm}$ of gauge length, and fitting in the jaws of the tensile testing equipment. Each coupon was printed in a part-by-part manner (as opposed to having a single layer of the print construct a slice of all coupons), to approximate real printing behavior as much as possible. Since a single experimental run yielded four coupons, post-processing was required to separate the force-data-speed pairings for each specimen. A pause was introduced between each part that would allow discerning when one specimen print was finished, and the next started. A schematic of the process is shown in Figure \ref{fig:print_dia}. 
 
 
 \begin{figure}[!htbp]
@@ -138,7 +138,7 @@ Tensile testing was performed using an Instron 5967 dual column universal testin
 
 \begin{figure}[h]
 	\center
-	\includegraphics[height=7cm, keepaspectratio]{tensgrip}
+	\includegraphics[height=8cm, keepaspectratio]{tensgrip}
 	\caption{Tensile testing setup} \label{fig:testsetup}
 \end{figure} 
 
@@ -166,32 +166,31 @@ Finally, combining Equations \ref{eq:v_b_2} and \ref{eq:v_b_3} yields the theore
 	S_{t}=\frac{4. LH. D_{N}. PS}{\pi . D^2 . 60s}
 \end{equation}
 
+\subsection{Experimental Results}\label{ssec:ml_exp_r}
+
+\subsubsection{Effect of Variations in Filament Diameter upon Extrusion Measurements}
+
+The effect of fluctuations in the filament geometry upon the required extrusion force is unknown, but are expected to be proportional given the current filament extrusion models. As an exploratory experiment, the data stemming from the measurements of the laser micrometer were matched to its corresponding data readings resulting from the printer sensors. The condition chosen to test this experiment was $LH = 0.2 \text{ mm}$, $D_{N} = 0.4 \text{ mm}$, $PS = 2400 \text{ mm/min}$. Matching the filament diameter and ovality measurements to the corresponding speed and force readings from the sensors resulted in inconclusive results. This can be seen in Figure \ref{fig:f_O_D}, where the force remains nearly constant despite the variations of filament diameter and ovality. 
 
 \begin{figure}[h]
 	\center
-	\subfloat[Effect of diameter on measured filament speed \label{fig:D_sp}]{%
-		\includegraphics[width=0.8\linewidth, keepaspectratio]{speed-OD}
+	\subfloat[Effect of ovality on measured filament force \label{fig:O_f}]{%
+		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-ovality}
 	}
 	\linebreak
 	\subfloat[Effect of diameter on measured filament force \label{fig:D_f}]{%
 		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-OD}
 	}
-	\caption{Effect of diameter on filament force and speed} \label{fig:dia_f_sp}
+	\caption{Effect of filament geometry on extrusion force} \label{fig:f_O_D}
 \end{figure}
 
-\begin{figure}[h]
-	\center
-	\subfloat[Effect of ovality on measured filament speed \label{fig:O_sp}]{%
-		\includegraphics[width=0.8\linewidth, keepaspectratio]{speed-ovality}
-	}
-	\linebreak
-	\subfloat[Effect of ovality on measured filament force \label{fig:O_f}]{%
-		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-ovality}
-	}
-	\caption{Effect of ovality on filament force and speed} \label{fig:ov_f_sp}
-\end{figure}
+Pairing the geometric information of the filament to its corresponding print data proved to be an extremely time consuming task, given that both sets of information came from different devices, and that in order to get proper matching, the starting point of the print had to be accurately pinpointed as length zero. The inconclusive nature of  these results, and the additional time required to further explore this phenomena lends itself well to be explored as future work, with a device that measures the filament geometry directly within the printer, as to facilitate exploring trends over more printing conditions. 
 
-\subsection{ML system architecture, training, and validation}\label{ssec:MLA}
+\subsubsection{Tensile Testing Results}
+
+
+
+\subsection{Model Architecture}\label{ssec:MLA}
 
 The following step of this work would involve using small subsets of the training data to test multiple models and algorithms in a reasonable amount of time. Performance metrics such as the Mean Square Error (MSE) or the Mean Absolute Error (MAE) would help narrow down the optimal candidate for each task \cite{Geron2019}. Depending on the outcome, the final architecture of the predictive system will be decided, including the algorithms for each segment of the machine learning pipeline if applicable. Ultimately, the final architecture of the system will be trained using the training data, and benchmarked against the validation set to check for inherent issues to the ML field, such as overfitting, and to assess the validity of the predicted outcome. The programming language of choice will be \emph{Python 3}, given its relative ease of syntax, open-source nature, as well as the availability of data science and ML libraries and resources such as \emph{NumPy, pandas, and TensorFlow}.
 
