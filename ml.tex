@@ -107,7 +107,7 @@ The target values of the predictive NN are the required average extrusion force 
 
 \subsection{Equipment and methods}\label{ssec:datag}
 
-A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) fitted with sensors capable of recording the force exerted by the filament upon the nozzle, discrete measurements of temperature, and changes in the extruded length over time were used to reproduce a variety of tensile coupons. A schematic of the printer setup can be seen in Figure \ref{fig:print_setup}. The data was collected using an Arduino board sampling at a frequency of 5 Hz, connected to MATLAB for visualization, processing, and logging. A Buttersworth filter was applied to amplify the signal-to-noise ratio of the outputs of the system. The code for the data acquisition and filtering can be found in Appendix \ref{ch:daq}. A random set of printing conditions were reproduced on all printers to monitor printer-to-printer variability.
+A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) fitted with sensors capable of recording the force exerted by the filament upon the nozzle, discrete measurements of temperature, and changes in the extruded length over time were used to reproduce a variety of tensile coupons. A schematic of the printer setup can be seen in Figure \ref{fig:print_setup}. The data was collected using an Arduino board sampling at a frequency of 5 Hz, connected to MATLAB for visualization, processing, and logging. A Buttersworth filter was applied to amplify the signal-to-noise ratio of the outputs of the system. The force sensor and encoder have an innate uncertainty of $\pm20 g$, and $200$ Pulses per Revolution respectively. The code for the data acquisition and filtering can be found in Appendix \ref{ch:daq}. A random set of printing conditions were reproduced on all printers to monitor printer-to-printer variability.
 
 \begin{figure}[!htbp]
 	\center
@@ -115,7 +115,7 @@ A set of 4 identical customized ME 3D printers (Minilab by FusedForm, Colombia) 
 	\caption{Schematic of modified ME printer with sensors} \label{fig:print_setup}
 \end{figure} 
 
-To minimize the impact of lurking variables, the filament was extruded in-house, using the SABIC Cycolac MG94 ABS material, using an extrusion line that maintained the filament diameter within the target of $1.75 \pm 0.05 \text{ mm}$ using a vacuum assisted water bath, a laser micrometer, and a conveyor belt in a control loop. Each filament was dried for a minimum of 3 hours at $65^{\circ}C$ and kept in a drybox attached to the printer during manufacturing. 
+To minimize the impact of lurking variables, the filament was extruded in-house, using the SABIC Cycolac MG94 ABS material, using an extrusion line that maintained the filament diameter within the target of $1.75 \pm 0.05 \text{ mm}$ using a vacuum assisted water bath, a laser micrometer, and a conveyor belt in a control loop. Each filament was dried for a minimum of 3 hours at $65^{\circ}C$ and kept in a drybox attached to the printer during manufacturing. Bed leveling was performed after 10 prints, or each time a change in material or nozzle was necessary. Nozzles were burned off in a furnace every time they were switched to minimize the influence of clogging.
 
 Each print consisted of four rectangular tensile coupons of dimensions $25 \text{ mm}$ by $100 \text{ mm}$ by $3.2 \text{ mm}$, chosen to strike a balance between being relatively quick to print, having at least $50\text{ mm}$ of gauge length, and fitting in the jaws of the tensile testing equipment. Each coupon was printed in a part-by-part manner (as opposed to having a single layer of the print construct a slice of all coupons), to approximate real printing behavior as much as possible. Since a single experimental run yielded four coupons, post-processing was required to separate the force-data-speed pairings for each specimen. A pause was introduced between each part that would allow discerning when one specimen print was finished, and the next started. A schematic of the process is shown in Figure \ref{fig:print_dia}. 
 
@@ -154,7 +154,7 @@ Manipulating Equation \ref{eq:v_b_1} to solve for $L$ results in:
 	L = \frac{LH. D_{N}. l. 4}{\pi . D_{f}^2}
 \end{equation}
 
-Now, one can use the expected time to print a bead of dimensions $l$ to solve for the expected print speed $S_{t}$.
+Now, one can use the expected time to print a bead of dimensions $l$ to solve for the expected filament speed $S_{t}$.
 
 \begin{equation} \label{eq:v_b_3}
 	t = \frac{l. 60 s}{PS}
@@ -172,7 +172,7 @@ Finally, combining Equations \ref{eq:v_b_2} and \ref{eq:v_b_3} yields the theore
 
 The effect of fluctuations in the filament geometry upon the required extrusion force is unknown, but are expected to be proportional given the current filament extrusion models. As an exploratory experiment, the data stemming from the measurements of the laser micrometer were matched to its corresponding data readings resulting from the printer sensors. The condition chosen to test this experiment was $LH = 0.2 \text{ mm}$, $D_{N} = 0.4 \text{ mm}$, $PS = 2400 \text{ mm/min}$. Matching the filament diameter and ovality measurements to the corresponding speed and force readings from the sensors resulted in inconclusive results. This can be seen in Figure \ref{fig:f_O_D}, where the force remains nearly constant despite the variations of filament diameter and ovality. 
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 	\center
 	\subfloat[Effect of ovality on measured filament force \label{fig:O_f}]{%
 		\includegraphics[width=0.8\linewidth, keepaspectratio]{force-ovality}
@@ -186,13 +186,99 @@ The effect of fluctuations in the filament geometry upon the required extrusion 
 
 Pairing the geometric information of the filament to its corresponding print data proved to be an extremely time consuming task, given that both sets of information came from different devices, and that in order to get proper matching, the starting point of the print had to be accurately pinpointed as length zero. The inconclusive nature of  these results, and the additional time required to further explore this phenomena lends itself well to be explored as future work, with a device that measures the filament geometry directly within the printer, as to facilitate exploring trends over more printing conditions. 
 
+\subsubsection{Printer Sensor Data Analysis}
+
+Generally speaking, the average measured filament speed was very consistent within a particular print condition. Standard deviation for filament print speed data varies between $6.6x10^{-4}$ and $1.8 \text{mm/s}$. In contrast, the measured print force varied drastically between experimental runs, and even within the same print. As an example, four print coupons produced in a single print using $LH= 0.2 mm, D_{N} = 0.4 mm, PS = 2400 mm/min$ had average forces of $792.66, 611.52, 516.86, \text{and } 554.91$ g respectively. The standard deviation of the measured print force ranged between $16$ and $475\text{ g}$, with higher variability observed in prints involving the smallest nozzle diameter combined with the largest layer height. The conditions selected to test experimental reproducibility between printers showed no higher variability than fluctuations of measured force and filament speed within the same printer, with the highest discrepancy between printers in the range of $100 \text{ g}$ and $1x10^{-3} \text{ mm/s}$ respectively. 
+
+For most conditions, the measured filament speed approximated the theoretical value fairly closely, with most specimens achieving a real-to-expected speed ratio between $0.95-0.97$. However, a couple of generalizations can be made for certain combinations of experimental values that had ratios below $0.9$. These involved the fastest $PSs$ combined with a $LH$ that was larger than the $D_{N}$, namely, a $0.3 \text{ mm} N_{D}$ paired with either a $0.4 \text{ mm}$ or $0.8 \text{ mm}$ $LH$. It is believed that this is caused by having filament force requirements that go beyond the capabilities of the machine, resulting in slippage at the drive wheel of the system. This effect was present in more conditions in the $90^{\circ}$ orientation, in particular, conditions that involved the $3000 mm/min$ gantry speed. This is theorized to be caused by a shorter travel distance between contiguous beads, implying that the acceleration of the system was not sufficient to attain the desired filament speed before the toolpass required a change in direction. 
+
 \subsubsection{Tensile Testing Results}
 
+Box-whisker plots were used to identify outliers in the data using the Interquartile Range method (IQR). Once an outlier was detected, the entry of the database was replaced with the average of that particular condition. This was done as a way to avoid data-loss without introducing noise or bias to the expected response. An example plot can be seen in Figure. %TODO
+%INSERT BOX AND WHISKERS PLOT HERE
+
+\subsection{Statistical Analysis}\label{ssec:fact}
+Analysis of the data was performed in two ways. First using the entire data set to develop a Pearson correlation matrix, and secondly, analyzed as a full-factorial experimental design, separating the data set in  two: one for each printing orientation. 
+
+The Pearson correlation matrix allows discerning whether variables and a response may posses a linear correlation with each other, with a coefficient of 1 (or -1) indicating perfect linear correlation. It should be noted that a low Pearson index does not mean no correlation, it simply implies that the relationship may not be linear in nature \cite{Geron2019}. The resulting matrix can be seen in \ref{tab:pearson}. Here it can be seen that out of all responses of interest, only the force shows high likelihood of linear correlation with the $LH$, $D_{N}$, $PS$, and $S$.
+
+\begin{table}[!htbp]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Pearson Correlation Matrix}
+	\begin{tabular}{l|llllllll}
+		\toprule
+		& O      & LH     & $D_N$  & PS     & S      & F      & E      & $\sigma_{T}$ \\
+		\midrule
+		O            & 1      & -0.056 & 0.063  & 0.042  & 0.003  & 0.044  & -0.108 & -0.835       \\
+		LH           & -0.056 & 1      & -0.018 & -0.011 & 0.6    & 0.583  & -0.097 & -0.077       \\
+		$D_N$        & 0.063  & -0.018 & 1      & 0.051  & 0.522  & -0.367 & -0.232 & -0.267       \\
+		PS           & 0.042  & -0.011 & 0.051  & 1      & 0.464  & 0.403  & -0.081 & -0.1         \\
+		S            & 0.003  & 0.6    & 0.522  & 0.464  & 1      & 0.398  & -0.209 & -0.176       \\
+		F            & 0.044  & 0.583  & -0.367 & 0.403  & 0.398  & 1      & 0.015  & -0.014       \\
+		E            & -0.108 & -0.097 & -0.232 & -0.081 & -0.209 & 0.015  & 1      & 0.215        \\
+		$\sigma_{T}$ & -0.835 & -0.077 & -0.267 & -0.1   & -0.176 & -0.014 & 0.215  & 1\\
+		\bottomrule          
+	\end{tabular}
+\end{table} \label{tab:pearson}
+
+The factorial experimental analysis of variance (ANOVA) yields results relating to how the input variables can have direct or interacting effects upon the measured response. Starting with the $0^{\circ}$ orientation, the ANOVA test determined that using a $95\%$ confidence interval, the print force is directly affected by the main effects of the selected control variables, as well as its two and three way interaction effects. A similar conclusion can be drawn for the tensile strength. Interestingly, only the Nozzle Diameter and the Print Speed have tangible main and interaction effects upon the Elastic Modulus. Results can be seen in Table \ref{tab:anova_0}, where $*$ denotes a p-value lower than $0.001$.
+
+\begin{table}[!htbp]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Summary ANOVA table of $0^{\circ}$ experiments}
+	\label{tab:anova_0}
+	\begin{tabular}{ccccccc}
+	\hline
+	& \multicolumn{2}{c}{F}                 & \multicolumn{2}{c}{E}                & \multicolumn{2}{c}{$\sigma_{T}$} \\ \hline
+	\multicolumn{1}{c|}{Effect}        & f      & \multicolumn{1}{c|}{p-value} & f     & \multicolumn{1}{c|}{p-value} & f              & p-value         \\
+	\multicolumn{1}{c|}{LH}            & 349.41 & \multicolumn{1}{c|}{*}       & 2.17  & \multicolumn{1}{c|}{0.117}   & 382.56         & *               \\
+	\multicolumn{1}{c|}{$D_{N}$}       & 361.45 & \multicolumn{1}{c|}{*}       & 11.30 & \multicolumn{1}{c|}{*}       & 3.44           & 0.034           \\
+	\multicolumn{1}{c|}{PS}            & 213.43 & \multicolumn{1}{c|}{*}       & 9.37  & \multicolumn{1}{c|}{*}       & 9.17           & *               \\
+	\multicolumn{1}{c|}{$LH*D_{N}$}    & 15.05  & \multicolumn{1}{c|}{*}       & 1.17  & \multicolumn{1}{c|}{0.326}   & 16.10          & *               \\
+	\multicolumn{1}{c|}{$LH*PS$}       & 44.50  & \multicolumn{1}{c|}{*}       & 3.21  & \multicolumn{1}{c|}{0.014}   & 30.16          & *               \\
+	\multicolumn{1}{c|}{$D_{N}*PS$}    & 4.77   & \multicolumn{1}{c|}{0.001}   & 1.22  & \multicolumn{1}{c|}{0.304}   & 35.95          & *               \\
+	\multicolumn{1}{c|}{$LH*D_{N}*PS$} & 3.97   & \multicolumn{1}{c|}{*}       & 0.67  & \multicolumn{1}{c|}{0.714}   & 53.64          & *               \\ \hline
+\end{tabular}
+\end{table} 
+
+Applying the same type of analysis to the $90^{\circ}$ population yields similar results. Here, at a $95\%$ confidence interval, $PS$, $LH*D_{N}$, and $LH*PS$ do not play a significant role in the response of the Young's modulus, while the $LH$ does not affect $\sigma_{T}$. All other main and interaction effects are considered significant at the selected $\alpha = 0.05$ value. Results of the ANOVA test can be seen in Table \ref{tab:anova_90}.
+
+\begin{table}[]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Summary ANOVA table of $90^{\circ}$ experiments}
+	\label{tab:anova_90}
+	\begin{tabular}{ccccccc}
+		\hline
+		& \multicolumn{2}{c}{F}                 & \multicolumn{2}{c}{E}                & \multicolumn{2}{c}{$\sigma_{T}$} \\ \hline
+		\multicolumn{1}{c|}{Effect}        & f      & \multicolumn{1}{c|}{p-value} & f     & \multicolumn{1}{c|}{p-value} & f              & p-value         \\
+		\multicolumn{1}{c|}{LH}            & 416.87 & \multicolumn{1}{c|}{*}       & 3.37  & \multicolumn{1}{c|}{0.039}   & 0.37           & 0.693           \\
+		\multicolumn{1}{c|}{$D_{N}$}       & 122.68 & \multicolumn{1}{c|}{*}       & 25.24 & \multicolumn{1}{c|}{*}       & 234.96         & *               \\
+		\multicolumn{1}{c|}{PS}            & 166.16 & \multicolumn{1}{c|}{*}       & 2.84  & \multicolumn{1}{c|}{0.064}   & 41.39          & *               \\
+		\multicolumn{1}{c|}{$LH*D_{N}$}    & 13.09  & \multicolumn{1}{c|}{*}       & 0.62  & \multicolumn{1}{c|}{0.649}   & 25.51          & *               \\
+		\multicolumn{1}{c|}{$LH*PS$}       & 66.31  & \multicolumn{1}{c|}{*}       & 2.33  & \multicolumn{1}{c|}{0.063}   & 21.86          & *               \\
+		\multicolumn{1}{c|}{$D_{N}*PS$}    & 22.28  & \multicolumn{1}{c|}{*}       & 13.77 & \multicolumn{1}{c|}{*}       & 14.30          & *               \\
+		\multicolumn{1}{c|}{$LH*D_{N}*PS$} & 41.20  & \multicolumn{1}{c|}{*}       & 5.90  & \multicolumn{1}{c|}{*}       & 16.71          & *               \\ \hline
+	\end{tabular}
+\end{table} 
+
+\subsection{Neural Network Architecture}\label{ssec:MLA}
+
+All NNs described in this section were developed using the TensorFlow platform for Python, using the Keras API. A primary iteration of the algorithm was trained using a stratified, random split approach that maintained the ratio of $0^{\circ}$ and $90^{\circ}$ samples to avoid accidental introduction of biases to the NN. This ratio was estimated to be  $51:49$ respectively. The split was set to the typical $80-20$ split, where $80\%$ of the data goes to train the model, and the remaining $20\%$ is stored separately and used to validate the model and check for over or underfitting. In order to facilitate the convergence of the algorithm to its optimal configuration, the data was normalized by using Equation \ref{eq:std} prior to being used by the model. In this computation, $X$ is a feature, $\mu$ is the mean of the feature values, and $\sigma$ is the standard deviation. This ensures all entries to the dataset have a comparable scale.
+
+\begin{equation} \label{eq:std}
+	X' = \frac{X-\mu}{\sigma}
+\end{equation} 
 
 
-\subsection{Model Architecture}\label{ssec:MLA}
 
-The following step of this work would involve using small subsets of the training data to test multiple models and algorithms in a reasonable amount of time. Performance metrics such as the Mean Square Error (MSE) or the Mean Absolute Error (MAE) would help narrow down the optimal candidate for each task \cite{Geron2019}. Depending on the outcome, the final architecture of the predictive system will be decided, including the algorithms for each segment of the machine learning pipeline if applicable. Ultimately, the final architecture of the system will be trained using the training data, and benchmarked against the validation set to check for inherent issues to the ML field, such as overfitting, and to assess the validity of the predicted outcome. The programming language of choice will be \emph{Python 3}, given its relative ease of syntax, open-source nature, as well as the availability of data science and ML libraries and resources such as \emph{NumPy, pandas, and TensorFlow}.
+\begin{figure}[h]
+	\center
+	\includegraphics[height=8cm, keepaspectratio]{arch_1}
+	\caption{Preliminary architecture for the NN} \label{fig:arch1}
+\end{figure}
 
 
 %______________________________________________________________________________________________
@@ -203,7 +289,10 @@ The following step of this work would involve using small subsets of the trainin
 \nomenclature[A]{MSE}{Mean Square Error}%
 \nomenclature[A]{MAE}{Mean Absolute Error}%
 \nomenclature[A]{SHAP}{Shapley Additive Explanations}%
+\nomenclature[A]{ANOVA}{Analysis of Variance}%
+\nomenclature[A]{IQR}{Interquartile Range}%
 
 % Symbols introduced in this chapter:
 \nomenclature[S]{$\phi_{j}$}{Shapley Value}
+\nomenclature[S]{$\sigma_{T}$}{Maximum Tensile Stress}
 \end{document}
