@@ -1,7 +1,7 @@
 %FailSurf test
 %clear all
 clc
-test =1; %Change number to calculate desired surface
+test =3; %Change number to calculate desired surface
 if (test==1)
     %G. Mazzei Master, Plots using Max Stress criterion
     Xt=40.29;    Xc=43.91;    Yt=31.13;    Yc=57.96;    S=23.35;
@@ -64,4 +64,6 @@ elseif (test==2)
     (F_11-1.*F_22).*c.^2+F_12.*c.*s+F_22)./((F_11.^2-2.*F_11.*F_22-1.*F_12.^2+F_22.^2-1.*F_1111+2.*F_1122+F_1212-1.*F_2222).*c.^4+...
     (2.*F_11.*F_12-2.*F_12.*F_22-2.*F_1112+2.*F_2212).*s.*c.^3+(2.*F_11.*F_22+F_12.^2-2.*F_22.^2-2.*F_1122-1.*F_1212+2.*F_2222).*c.^2+...
     (2.*F_12.*F_22-2.*F_2212).*s.*c+F_22.^2-1.*F_2222);
+elseif (test = 3)
+    
 end

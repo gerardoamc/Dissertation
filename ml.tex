@@ -190,11 +190,12 @@ Pairing the geometric information of the filament to its corresponding print dat
 
 Generally speaking, the average measured filament speed was very consistent within a particular print condition. Standard deviation for filament print speed data varies between $6.6x10^{-4}$ and $1.8 \text{mm/s}$. In contrast, the measured print force varied drastically between experimental runs, and even within the same print. As an example, four print coupons produced in a single print using $LH= 0.2 mm, D_{N} = 0.4 mm, PS = 2400 mm/min$ had average forces of $792.66, 611.52, 516.86, \text{and } 554.91$ g respectively. The standard deviation of the measured print force ranged between $16$ and $475\text{ g}$, with higher variability observed in prints involving the smallest nozzle diameter combined with the largest layer height. The conditions selected to test experimental reproducibility between printers showed no higher variability than fluctuations of measured force and filament speed within the same printer, with the highest discrepancy between printers in the range of $100 \text{ g}$ and $1x10^{-3} \text{ mm/s}$ respectively. 
 
-For most conditions, the measured filament speed approximated the theoretical value fairly closely, with most specimens achieving a real-to-expected speed ratio between $0.95-0.97$. However, a couple of generalizations can be made for certain combinations of experimental values that had ratios below $0.9$. These involved the fastest $PSs$ combined with a $LH$ that was larger than the $D_{N}$, namely, a $0.3 \text{ mm} N_{D}$ paired with either a $0.4 \text{ mm}$ or $0.8 \text{ mm}$ $LH$. It is believed that this is caused by having filament force requirements that go beyond the capabilities of the machine, resulting in slippage at the drive wheel of the system. This effect was present in more conditions in the $90^{\circ}$ orientation, in particular, conditions that involved the $3000 mm/min$ gantry speed. This is theorized to be caused by a shorter travel distance between contiguous beads, implying that the acceleration of the system was not sufficient to attain the desired filament speed before the toolpass required a change in direction. 
+For most conditions, the measured filament speed approximated the theoretical value fairly closely, with most specimens achieving a real-to-expected speed ratio between $0.95-0.97$. However, a couple of generalizations can be made for certain combinations of experimental values that had ratios below $0.9$. These involved the fastest $PSs$ combined with a $LH$ that was larger than the $D_{N}$, namely, a $0.3 \text{ mm} N_{D}$ paired with either a $0.4 \text{ mm}$ or $0.8 \text{ mm}$ $LH$. It is believed that this is caused by having filament force requirements that go beyond the capabilities of the machine, resulting in slippage at the drive wheel of the system. This effect was present in more conditions in the $90^{\circ}$ orientation, in particular, conditions that involved the $3600 mm/min$ gantry speed. This is theorized to be caused by a shorter travel distance between contiguous beads, implying that the acceleration of the system was not sufficient to attain the desired filament speed before the toolpass required a change in direction. 
 
 \subsubsection{Tensile Testing Results}
 
-Box-whisker plots were used to identify outliers in the data using the Interquartile Range method (IQR). Once an outlier was detected, the entry of the database was replaced with the average of that particular condition. This was done as a way to avoid data-loss without introducing noise or bias to the expected response. An example plot can be seen in Figure. %TODO
+Tensile results showed generally speaking good agreement between replicates. The exceptions came mostly in the conditions that involved the largest $LH$ combined with the lowest $D_{N}$, in particular, those printed using the two fastest $PSs$. This paired with the results stemming from the force sensor data allows one to conclude that this response is rooted in printing defects introduced due to difficulty of the machine to attain sustainable printing pressure during the manufacturing of the coupons. The standard deviation ranged from as low as $86$ and $0.19$ MPa, to as high as $931$ and $7.56$ MPa for the Young's modulus and the Maximum Tensile Strength respectively.
+
 %INSERT BOX AND WHISKERS PLOT HERE
 
 \subsection{Statistical Analysis}\label{ssec:fact}
@@ -264,15 +265,23 @@ Applying the same type of analysis to the $90^{\circ}$ population yields similar
 	\end{tabular}
 \end{table} 
 
-\subsection{Neural Network Architecture}\label{ssec:MLA}
+\subsection{Neural Network Architecture and Results}\label{ssec:MLA}
 
-All NNs described in this section were developed using the TensorFlow platform for Python, using the Keras API. A primary iteration of the algorithm was trained using a stratified, random split approach that maintained the ratio of $0^{\circ}$ and $90^{\circ}$ samples to avoid accidental introduction of biases to the NN. This ratio was estimated to be  $51:49$ respectively. The split was set to the typical $80-20$ split, where $80\%$ of the data goes to train the model, and the remaining $20\%$ is stored separately and used to validate the model and check for over or underfitting. In order to facilitate the convergence of the algorithm to its optimal configuration, the data was normalized by using Equation \ref{eq:std} prior to being used by the model. In this computation, $X$ is a feature, $\mu$ is the mean of the feature values, and $\sigma$ is the standard deviation. This ensures all entries to the dataset have a comparable scale.
+All NNs described in this section were developed using the TensorFlow platform for Python, using the Keras API. A primary iteration of the algorithm was trained using a stratified, random split approach that maintained the ratio of $0^{\circ}$ and $90^{\circ}$ samples to avoid accidental introduction of biases to the NN. This ratio was estimated to be  $51:49$ respectively. The split was set to the typical $80-20$ split, where $80\%$ of the data goes to train the model, and the remaining $20\%$ is stored separately and used to validate the system and check for over or underfitting. In order to facilitate the convergence of the algorithm to its optimal configuration, the data was normalized by using Equation \ref{eq:std} prior to being used by the model. In this computation, $X$ is a feature, $\mu$ is the mean of the feature values, and $\sigma$ is the standard deviation. This ensures all entries to the dataset have a comparable scale.
 
 \begin{equation} \label{eq:std}
 	X' = \frac{X-\mu}{\sigma}
 \end{equation} 
 
+With the exception of the output neurons, all nodes had the activation function set to the Rectified Linear Unit (ReLU) function. This activation function is generally considered to be superior to most common alternatives and is relatively easy to compute. Its formula simply outputs the positive part of the argument. Should the input be negative, the output is zero. The chosen loss function for the model was the Mean Square Error (MSE) function, represented in Equation \ref{eq:mse}, where $Y_{i}-\hat{Y_{i}}$ represents the difference between model prediction and real value, and $n$ represents the number of datapoints used to compare model and reality. 
 
+\begin{equation} \label{eq:mse}
+	MSE = \frac{1}{n}\sum_{i=1}^{n} (Y_{i}-\hat{Y_{i}})^2
+\end{equation}
+
+The optimizer function chosen for this study was the "Adam" proposed by Kingma and Ba \cite{kingma2017adam}. This optimizer offers a mixture of the advantages offered by Stochastic Gradient Descent (SGD), with the only caveat of adding additional parameters to the model. This approach avoids the erratic behavior of SGD as it approaches the minimum of the loss function.
+
+The network architecture involved a single input layer, and three branches. Each branch computes the output of the expected extrusion force, Young's modulus, and Tensile strength. Each branch contains two dense layers, with a "dropout" layer in between. This process randomly removes a number of neurons form the preceding layer temporarily each iteration of the training process, ranging from $0$ to $100\%$ of the neurons. This has the effect of ensuring the network adapts by establishing connections that are truly meaningful between nodes, and tends to prevent overfitting. The chosen rate of dropout for all dropout layers was $0.5$, meaning that each epoch, $50\%$ of the neurons were temporarily removed from the model. A schematic representation of the model generated through TensorFlow can be seen in Figure \ref{fig:arch1}. The inputs of the network were the 4 controlled variables, and the ratio of the measured filament velocity against the expected filament velocity derived from a volumetric balance, resulting in 5 inputs.  
 
 \begin{figure}[h]
 	\center
@@ -280,6 +289,85 @@ All NNs described in this section were developed using the TensorFlow platform f
 	\caption{Preliminary architecture for the NN} \label{fig:arch1}
 \end{figure}
 
+Custom code was developed using the keras tuner utility to iterate multiple variations of this architecture to achieve the highest performance possible during training in a systematic method. This code would train different versions of the model using different number of neurons per layer, and varying the learning rate of the optimizer function. A list of the model hyperparameters can be found in Table \ref{tab:nn1_hp}.
+
+\begin{table}[!htbp] %Fixates table so that it doesn't randomly jump around between pages
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\caption{Neural Network Hyperparameters of Note}
+	\label{tab:nn1_hp}
+	\begin{tabular}{ c c } 
+		\toprule
+		\textbf{Hyperparameter} & \textbf{Value} \\
+		\midrule
+		Learning Rate  &  $[1x10^{-4}, 1x10^{-2}]$\\
+		Number of Neurons per Layer  & $[32,72]$\\
+		Batch Size & $20$\\
+		Max. Number of Epochs & $30$\\
+		Early Stopping Patience & $5$\\
+		\bottomrule
+	\end{tabular}	
+\end{table}
+
+The optimal model architecture per the hyperparameter tuning process uses $64$ neurons per layer, and a learning rate of $0.00972$. Using the optimal architecture to train the model yielded the Results shown in Figure \ref{fig:nn1_p_a}. These plots show that the model converges to a minimum, and there is no evidence of overfitting. Here the blue line shows the change of the Root Mean Square Error (RMSE) during the training step, while the green line tracks the validation procedure. 
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[width=0.7\linewidth, keepaspectratio]{nn1_perf_a}
+	\caption{Learning curves for the primary NN} \label{fig:nn1_p_a}
+\end{figure}
+
+It should be noted that the model achieved an RMSE comparable to the range of uncertainty of the extrusion force and the Tensile Stress at failure. However, performance was poor in terms of the Young's Modulus prediction. This is better visualized in Figure \ref{fig:nn1_p_b}, where the true value of a response is plotted against the prediction of the model. A model that perfectly captures the behavior of the system is represented with a line of slope 1.
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=10cm, keepaspectratio]{nn1_perf_b}
+	\caption{Comparison of predictions and true ouputs using the validation set} \label{fig:nn1_p_b}
+\end{figure}
+
+Finally, exploring the SHAP results of the model allows one to draw conclusions regarding how the model is making predictions, and potentially how to fine tune a second iteration of the NN. Starting with the Force Output $F$, the greatest absolute average Shapley value was attributed to the $LH$. Next, both the $PS$ and $ND$ had Shapley value attributions of roughly half of that of $LH$. Finally, the print Orientation $O$ and the filament speed ratio $S_r$ had the lowest values, with $O$ having a Shapley value of roughly $1/6$ of the attribution of $LH$, while $S_r$ had an average impact of around $1/30$. These results are better appreciated in Figure \ref{fig:nn1_shapF}. 
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=5cm, keepaspectratio]{shap_F_1}
+	\caption{Mean Shapley values for Force output} \label{fig:nn1_shapF}
+\end{figure}
+
+This plot can be interpreted as how much each feature of the model contributes to the final force output on average. For instance, changes in the layer height of a print will result in a change of $300 g$ on the required extrusion Force. By contrast, the filament speed ratio results in a change of roughly $10g$, negligible if one considers the uncertainty of the force sensor is $20 g$. However, fine tuning the model is not as simple as removing the features of lowest Shapley values. As indicated by the statistical analysis of the data set, the interacting effects of all controlled variables were rarely negligible. Additionally, most of the experiments performed to acquire the data yielded filament speeds that matched the theoretical filament speed closely, thus, the small contribution of the Filament Speed ratio could be attributed to a near uniform population. A similar analysis can be made using the Shapley values of the other two model outputs. These are shown in Figure \ref{fig:ETS_shap}. Surprisingly, for the remaining two outputs, the $S_r$ increased in importance. As expected, the print orientation is the largest contributor to the tensile strength of the parts, and in accordance to the statistical analysis, the largest contributor to the Young's modulus estimation is the nozzle diameter. 
+
+\begin{figure}[!htbp]
+	\center
+	\subfloat[Mean Shapley values for Modulus output \label{fig:nn1_shapE}]{%
+		\includegraphics[height=4cm, keepaspectratio]{shap_E_1}
+	}
+	\linebreak
+	\subfloat[Mean Shapley values for Tensile Strength output\label{fig:nn1_shapTS}]{%
+		\includegraphics[height=4cm, keepaspectratio]{shap_TS_1}
+	}
+	\caption{Mean Shapley values for $E$ and $\sigma_{T}$} \label{fig:ETS_shap}
+\end{figure}
+
+Unfortunately, while the model proved acceptable at predicting expected extrusion force and tensile strength of the part, the model's capability to predict the Young's modulus should be improved. Future work could explore additional architectures using the findings from this work, or increase the data size by performing additional experiments.
+   
+\section{Potential Applications}\label{sec:app}
+\subsection{Prediction of Failure Envelope}
+As the model is capable of predicting the tensile strength in the $0$ and $90$ degree orientation, it lends itself well to generate a very conservative version of the SSIC. Assuming that the failure at shear is approximately the failure at tension at $90^{\circ}$, that the failure stresses in compression are equal to their corresponding failure in tension, and that all stress interactions are 0, one could generate a SSIC failure envolope for a part as soon as it is finished printing. As an example, the failure envelope shown in Figure \ref{fig:fc_nn} was developed for printing conditions $LH= 0.1 mm, D_{N}= 0.3 mm, PS = 1200 mm/min, S_r = 0.96$. This could prove particularly useful for the automotive or aerospace industries, as all attempts known to the author to predict failure in AM through FC are locked to a fixed set of printing conditions. 
+
+\begin{figure}[!htbp]
+	\center
+	\includegraphics[height=8cm, keepaspectratio]{pred_FC}
+	\caption{Conservative Failure Surface predicted through the NN} \label{fig:fc_nn}
+\end{figure}
+
+\subsection{Detection of Print Defects or Printer Issues}
+
+As the model is capable of predicting the average print force required to extrude a polymer bead under a certain combination of the controlled variables, one could develop a system capable of alerting the user to stop the print, or even perhaps self correct the issue, if the measured print force deviates wildly from the expected output. As anecdotal evidence that this is viable, the author experienced this first-hand during the experiments that measured the inter printer variability. While performing a control print on the four printers, the force detected by one of the sensors was uncharacteristically high, differing from its other three counterparts by thousands of grams, as opposed to the usual hundreds. After servicing the printer, the root of the issue was determined to be a degraded teflon tubing within the heated chamber of the print head that greatly restricted the movement of the filament. 
+
+\section{Conclusions}
+
+This work was able to create a NN capable of predicting the expected extrusion force, Young's modulus, and Tensile Strength of FFF parts produced using a specialized printer with sensors capable of measuring the filament extrusion speed and force. Through the use of Shapley values and traditional statistical analysis, it was shown how most of the inputs and their corresponding interaction effects, have a significant impact on the predictions from the model. The weak link in the NN was shown to be the predictive capabilities of Elastic Modulus estimations, where the RMSE could be as high as $1000 MPa$. Additional network architectures or supplemental data could potentially improve the performance of the model in this output. 
+
+The predictions that stem from this resource can prove useful to engineers designing functional parts for AM, as the NN can predict arguably the two most critical mechanical properties necessary to estimate a failure surface. This work additionally extends the invitation for future work to be focused on a smart system that makes use of the sensors within the printer, and the expected predicted extrusion Force, to detect print defects and either stop the print or autocorrect the issue. Finally, the results presented here and the NN developed, have the potential to aid in the explanation of the underlying physics of how the FFF process tends to produce parts that are anisotropic.
 
 %______________________________________________________________________________________________
 % Nomenclature introduced in this chapter:

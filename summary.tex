@@ -1,0 +1,49 @@
+% summary.tex
+\documentclass[main.tex]{subfiles}
+\begin{document}
+\chapter{Summary}\label{ch:summary}
+	 
+\section{Contributions}
+This dissertation presented two strategies to tackle the unpredictability of the mechanical response of Fused Filament Fabrication parts. The first, involved deployment and validation of a failure surface for FFF parts. The second, lead to the deployment of a Neural Network capable of predicting the expected mechanical response of FFF parts in terms of the tensile strength and Elastic modulus in $0^{\circ}$ and $90^{\circ}$ orientations. Additionally, the specialized 3D printer used to develop this Machine Learning system allowed generating data and models capable of relating printing parameters and process indicators to the necessary force required to overcome the pressure gradient within the FFF nozzle. These results indicate that the analytical models available in literature at the moment do not fully capture the intricacies of the rheological phenomena ocurring during the printing process. 
+
+In Chapter \ref{ch:fc_val}, a series of uniaxial mechanical tests that resulted in a complex stress state in the principal directions of the FFF part were used to demonstrate the validity of the failure envelope produced for ABS FFF parts. Results showed how the SSIC was capable of predicting the failure stress of 3D printed parts at a variety of raster angles with a maximum error of $8\%$, indicating that the safety threshold determined by the Failure Criterion is appropriate.
+
+In Chapter \ref{ch:data_ex}, a novel FFF machine with a force sensor and an encoder capable of capturing the changes in filament extrusion velocity was used to compare real experimental results to the estimations attainable through the two most recognized analytical models for FFF melting available in literature. The results showed that neither model fully captures the real behavior observed through the use of sensors. This chapter also allowed the researcher to develop data processing protocols that would be of service to the last part of this work.
+
+Finally, Chapter \ref{ch:ml} deployed a Neural Network capable of predicting the required extrusion force, and expected Young's modulus and Tensile Strength for an FFF part produced under a variety of printing conditions. Statistical analysis of the data and application of Shapley values allowed appreciating how much the Layer Height, Nozzle Diameter, Print Speed, and Measured Speed contribute to the mechanical properties of the part, as well as the extrusion force. To the knowledge of the author, this is the first time this approach has been applied to FFF.
+
+\section{Recommendations for Future Work}
+The main objective of this work was to explore solutions that would enable a wider embrace of AM techniques in applications where the finished part will be subjected to considerable mechanical loads. While the bulk of this work deals with the FFF process, most of the methods described here are agnostic to the manufacturing technique, and thus could be easily extrapolated to other AM technologies faced with the same issues the FFF process is currently facing. This includes, but is not limited to MJF, DLS, and SLS. 
+
+Another venue of work worth exploring is the concept of deploying an in-line machine learning solution. The work shown here collects the raw data and post processes it after the finished part is complete. An in-line solution would make decisions and adjustments to the process in real time, as it receives the data directly from the machine. This can lead to intelligent systems capable of compensating for insufficient material throughput, cancellation of defective prints, or even capable of predicting properties not measured by the author of this work, such as the formation of voids. 
+
+Finally, this work showcased a simple and rather conservative marriage of NN predictions and Failure Criteria. The final demonstration of structural reliability of AM parts would involve designing a functional part to be subjected to mechanical loads, whose structural stability is predicted by a Neural Network. This Machine Learning solution is outputting the mechanical components that go into calculating a fully characterized failure envelope. The part can then be physically produced and destructively tested, with results compared to a simulation that utilizes the predicted failure envelope to assess structural integrity. This would effectively be an end-to-end digital twin approach to failure prediction, and it is a concept that is already in use in the automotive and aerospace industries.  
+
+\section{Publications}
+
+The list below details publications directly or indirectly produced as a consequence of this work.
+\subsubsection{Refereed Journal Publications}
+\begin{itemize}
+	\item \fullcite{MazzeiCapote2019}
+	\item \fullcite{Colon2019}
+	\item \fullcite{MazzeiJCompSci}
+	\item \fullcite{Osswald2020a}
+	\item \fullcite{ColonQuintana2021}
+	\item \fullcite{MazzeiCapote2021}
+\end{itemize}
+
+\subsubsection{Conference Proceedings}
+\begin{itemize}
+	\item \fullcite{MazzeiCapote2017}
+\end{itemize} 
+
+\subsubsection{Supervised works}
+During the course of this research, the author has been responsible for supervising the following works, presented in chronological order:
+
+\begin{itemize}
+	\item \fullcite{Durris2018} % Thibaut Durris (Semester thesis)
+	\item \fullcite{Bustos2020} % Max Bustos (Semester thesis)
+\end{itemize}	
+
+
+\end{document}
