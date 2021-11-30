@@ -81,7 +81,7 @@ Finally, for the purposes of SHAP, the explanation model of choice has each effe
 
 Using Equations \ref{eq:shap_MC} and \ref{eq:SHAP}, one can use Shapley values to identify the importance of features in a respective model. This allows the user to make decision pertaining to the architecture of the model, as well as appreciating the impact a particular input can have on the output of the model \textemdash something that would be difficult to do without this resource. These mathematical principles are built into the SHAP Python library out of the box \cite{NIPS2017_8a20a862}.
 
-Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by training a NN with data generated through the use of sensors built into a 3D printer. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height (LH), Nozzle Diameter (ND), and Print Speed (PS). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons. The models produced through this research will be analyzed using Shapley values through the SHAP method to draw conclusions regarding the impact of the selected features of the model.
+Given the factors outlined this far, the fundamental goal of this research is to predict ME part mechanical performance by training a NN with data generated through the use of sensors built into a 3D printer. This tool can then be used to predict final mechanical properties of the part based on the data generated during the print. The features selected as controlled variables for the Design of Experiments (DoE) were Layer Height ($h_{L}$), Nozzle Diameter ($D_{N}$), and Print Speed ($U_{xy}$). These parameters were chosen based on previous research that shows that these slicing parameters had a tangible impact upon the final tensile strength of ME coupons \cite{Koch2017, Rankouhi2016}. Coupons are to be printed in both $0\deg$ and $90\deg$ orientations so the model can predict both the highest and lowest possible mechanical properties of each particular printing condition. Additional attention will be paid to the changes in required print force as these parameters are varied to produce the mechanical test coupons. The models produced through this research will be analyzed using Shapley values through the SHAP method to draw conclusions regarding the impact of the selected features of the model.
 
 \section{Experimental Methods} \label{sec:ml_meth}
 
@@ -97,9 +97,9 @@ The target values of the predictive NN are the required average extrusion force 
 		\toprule
 		\textbf{Variable} & \textbf{Levels} \\
 		\midrule
-		 Layer Height (LH) [$mm$]  &  0.1, 0.2, 0.4\\
+		 Layer Height ($h_{L}$) [$mm$]  &  0.1, 0.2, 0.4\\
 		 Nozzle Diameter ($D_{N}$) [$mm$] & 0.3, 0.4, 0.8\\
-		 Print Speed (PS) [$mm/min$] & 1200, 2400, 3600\\
+		 Print Speed ($U_{xy}$) [$mm/min$] & 1200, 2400, 3600\\
 		\bottomrule
 	\end{tabular}
 	\label{tab:ml_doe}
@@ -142,35 +142,35 @@ Tensile testing was performed using an Instron 5967 dual column universal testin
 	\caption{Tensile testing setup} \label{fig:testsetup}
 \end{figure} 
 
-An additional metric that can aid in identifying underlying systematic issues or relationships between the print and its mechanical properties is comparing the expected filament speed against its experimentally measured counterpart. The theoretical filament speed can be calculated using a simple volumetric balance. The volume of an extruded bead can be approximated as $ND. D_{N}. l$, where $l$ represents the bead length. Given that mass must be conserved, this implies that the volume of the bead $V_{out}$ must be equal to the volume supplied by the incoming filament $V_{in}$ resulting in the equation below, where $D_{f}$ and $L$ represent the filament diameter and length supplied to extrude the bead respectively:
+An additional metric that can aid in identifying underlying systematic issues or relationships between the print and its mechanical properties is comparing the expected filament speed against its experimentally measured counterpart. The theoretical filament speed can be calculated using a simple volumetric balance. The volume of an extruded bead can be approximated as $h_{L}. D_{N}. l$, where $l$ represents the bead length. Given that mass must be conserved, this implies that the volume of the bead $V_{out}$ must be equal to the volume supplied by the incoming filament $V_{in}$ resulting in the equation below, where $D_{f}$ and $L$ represent the filament diameter and length supplied to extrude the bead respectively:
 
 \begin{equation} \label{eq:v_b_1}
-	V_{out}= LH . D_{N} . l = V_{in} = \frac{\pi . D_{f}^2 . L}{4}
+	V_{out}= h_{L} . D_{N} . l = V_{in} = \frac{\pi . D_{f}^2 . L}{4}
 \end{equation}
 
 Manipulating Equation \ref{eq:v_b_1} to solve for $L$ results in:
 
 \begin{equation} \label{eq:v_b_2}
-	L = \frac{LH. D_{N}. l. 4}{\pi . D_{f}^2}
+	L = \frac{h_{L}. D_{N}. l. 4}{\pi . D_{f}^2}
 \end{equation}
 
 Now, one can use the expected time to print a bead of dimensions $l$ to solve for the expected filament speed $S_{t}$.
 
 \begin{equation} \label{eq:v_b_3}
-	t = \frac{l. 60 s}{PS}
+	t = \frac{l}{U_{xy}}
 \end{equation}
 
-Finally, combining Equations \ref{eq:v_b_2} and \ref{eq:v_b_3} yields the theoretical filament speed, $S_{t}$. The equation includes a conversion factor to solve in units of $mm/s$.
+Finally, converting units and combining Equations \ref{eq:v_b_2} and \ref{eq:v_b_3} yields the theoretical filament speed, $S_{t}$. 
 
 \begin{equation} \label{eq:v_b_4}
-	S_{t}=\frac{4. LH. D_{N}. PS}{\pi . D^2 . 60s}
+	S_{t}=\frac{4. h_{L}. D_{N}. U_{xy}}{\pi . D^2}
 \end{equation}
 
 \subsection{Experimental Results}\label{ssec:ml_exp_r}
 
 \subsubsection{Effect of Variations in Filament Diameter upon Extrusion Measurements}
 
-The effect of fluctuations in the filament geometry upon the required extrusion force is unknown, but are expected to be proportional given the current filament extrusion models. As an exploratory experiment, the data stemming from the measurements of the laser micrometer were matched to its corresponding data readings resulting from the printer sensors. The condition chosen to test this experiment was $LH = 0.2 \text{ mm}$, $D_{N} = 0.4 \text{ mm}$, $PS = 2400 \text{ mm/min}$. Matching the filament diameter and ovality measurements to the corresponding speed and force readings from the sensors resulted in inconclusive results. This can be seen in Figure \ref{fig:f_O_D}, where the force remains nearly constant despite the variations of filament diameter and ovality. 
+The effect of fluctuations in the filament geometry upon the required extrusion force is unknown, but are expected to be proportional given the current filament extrusion models. As an exploratory experiment, the data stemming from the measurements of the laser micrometer were matched to its corresponding data readings resulting from the printer sensors. The condition chosen to test this experiment was $h_{L} = 0.2 \text{ mm}$, $D_{N} = 0.4 \text{ mm}$, $U_{xy} = 2400 \text{ mm/min}$. Matching the filament diameter and ovality measurements to the corresponding speed and force readings from the sensors resulted in inconclusive results. This can be seen in Figure \ref{fig:f_O_D}, where the force remains nearly constant despite the variations of filament diameter and ovality. 
 
 \begin{figure}[!htbp]
 	\center
@@ -188,20 +188,20 @@ Pairing the geometric information of the filament to its corresponding print dat
 
 \subsubsection{Printer Sensor Data Analysis}
 
-Generally speaking, the average measured filament speed was very consistent within a particular print condition. Standard deviation for filament print speed data varies between $6.6x10^{-4}$ and $1.8 \text{mm/s}$. In contrast, the measured print force varied drastically between experimental runs, and even within the same print. As an example, four print coupons produced in a single print using $LH= 0.2 mm, D_{N} = 0.4 mm, PS = 2400 mm/min$ had average forces of $792.66, 611.52, 516.86, \text{and } 554.91$ g respectively. The standard deviation of the measured print force ranged between $16$ and $475\text{ g}$, with higher variability observed in prints involving the smallest nozzle diameter combined with the largest layer height. The conditions selected to test experimental reproducibility between printers showed no higher variability than fluctuations of measured force and filament speed within the same printer, with the highest discrepancy between printers in the range of $100 \text{ g}$ and $1x10^{-3} \text{ mm/s}$ respectively. 
+Generally speaking, the average measured filament speed was very consistent within a particular print condition. Standard deviation for filament print speed data varies between $6.6x10^{-4}$ and $1.8 \text{mm/s}$. In contrast, the measured print force varied drastically between experimental runs, and even within the same print. As an example, four print coupons produced in a single print using $h_{L}= 0.2 mm, D_{N} = 0.4 mm, U_{xy} = 2400 mm/min$ had average forces of $792.66, 611.52, 516.86, \text{and } 554.91$ g respectively. The standard deviation of the measured print force ranged between $16$ and $475\text{ g}$, with higher variability observed in prints involving the smallest nozzle diameter combined with the largest layer height. The conditions selected to test experimental reproducibility between printers showed no higher variability than fluctuations of measured force and filament speed within the same printer, with the highest discrepancy between printers in the range of $100 \text{ g}$ and $1x10^{-3} \text{ mm/s}$ respectively. 
 
-For most conditions, the measured filament speed approximated the theoretical value fairly closely, with most specimens achieving a real-to-expected speed ratio between $0.95-0.97$. However, a couple of generalizations can be made for certain combinations of experimental values that had ratios below $0.9$. These involved the fastest $PSs$ combined with a $LH$ that was larger than the $D_{N}$, namely, a $0.3 \text{ mm} N_{D}$ paired with either a $0.4 \text{ mm}$ or $0.8 \text{ mm}$ $LH$. It is believed that this is caused by having filament force requirements that go beyond the capabilities of the machine, resulting in slippage at the drive wheel of the system. This effect was present in more conditions in the $90^{\circ}$ orientation, in particular, conditions that involved the $3600 mm/min$ gantry speed. This is theorized to be caused by a shorter travel distance between contiguous beads, implying that the acceleration of the system was not sufficient to attain the desired filament speed before the toolpass required a change in direction. 
+For most conditions, the measured filament speed approximated the theoretical value fairly closely, with most specimens achieving a real-to-expected speed ratio between $0.95-0.97$. However, a couple of generalizations can be made for certain combinations of experimental values that had ratios below $0.9$. These involved the fastest $PSs$ combined with a $h_{L}$ that was larger than the $D_{N}$, namely, a $0.3 \text{ mm} N_{D}$ paired with either a $0.4 \text{ mm}$ or $0.8 \text{ mm}$ $h_{L}$. It is believed that this is caused by having filament force requirements that go beyond the capabilities of the machine, resulting in slippage at the drive wheel of the system. This effect was present in more conditions in the $90^{\circ}$ orientation, in particular, conditions that involved the $3600 mm/min$ gantry speed. This is theorized to be caused by a shorter travel distance between contiguous beads, implying that the acceleration of the system was not sufficient to attain the desired filament speed before the toolpass required a change in direction. 
 
 \subsubsection{Tensile Testing Results}
 
-Tensile results showed generally speaking good agreement between replicates. The exceptions came mostly in the conditions that involved the largest $LH$ combined with the lowest $D_{N}$, in particular, those printed using the two fastest $PSs$. This paired with the results stemming from the force sensor data allows one to conclude that this response is rooted in printing defects introduced due to difficulty of the machine to attain sustainable printing pressure during the manufacturing of the coupons. The standard deviation ranged from as low as $86$ and $0.19$ MPa, to as high as $931$ and $7.56$ MPa for the Young's modulus and the Maximum Tensile Strength respectively.
+Tensile results showed generally speaking good agreement between replicates. The exceptions came mostly in the conditions that involved the largest $h_{L}$ combined with the lowest $D_{N}$, in particular, those printed using the two fastest $PSs$. This paired with the results stemming from the force sensor data allows one to conclude that this response is rooted in printing defects introduced due to difficulty of the machine to attain sustainable printing pressure during the manufacturing of the coupons. The standard deviation ranged from as low as $86$ and $0.19$ MPa, to as high as $931$ and $7.56$ MPa for the Young's modulus and the Maximum Tensile Strength respectively.
 
 %INSERT BOX AND WHISKERS PLOT HERE
 
 \subsection{Statistical Analysis}\label{ssec:fact}
 Analysis of the data was performed in two ways. First using the entire data set to develop a Pearson correlation matrix, and secondly, analyzed as a full-factorial experimental design, separating the data set in  two: one for each printing orientation. 
 
-The Pearson correlation matrix allows discerning whether variables and a response may posses a linear correlation with each other, with a coefficient of 1 (or -1) indicating perfect linear correlation. It should be noted that a low Pearson index does not mean no correlation, it simply implies that the relationship may not be linear in nature \cite{Geron2019}. The resulting matrix can be seen in \ref{tab:pearson}. Here it can be seen that out of all responses of interest, only the force shows high likelihood of linear correlation with the $LH$, $D_{N}$, $PS$, and $S$.
+The Pearson correlation matrix allows discerning whether variables and a response may posses a linear correlation with each other, with a coefficient of 1 (or -1) indicating perfect linear correlation. It should be noted that a low Pearson index does not mean no correlation, it simply implies that the relationship may not be linear in nature \cite{Geron2019}. The resulting matrix can be seen in \ref{tab:pearson}. Here it can be seen that out of all responses of interest, only the force shows high likelihood of linear correlation with the $h_{L}$, $D_{N}$, $U_{xy}$, and $S$.
 
 \begin{table}[!htbp]
 	\renewcommand{\arraystretch}{1.5}
@@ -209,12 +209,12 @@ The Pearson correlation matrix allows discerning whether variables and a respons
 	\caption{Pearson Correlation Matrix}
 	\begin{tabular}{l|llllllll}
 		\toprule
-		& O      & LH     & $D_N$  & PS     & S      & F      & E      & $\sigma_{T}$ \\
+		& O      & $h_{L}$     & $D_N$  & $U_{xy}$     & S      & F      & E      & $\sigma_{T}$ \\
 		\midrule
 		O            & 1      & -0.056 & 0.063  & 0.042  & 0.003  & 0.044  & -0.108 & -0.835       \\
-		LH           & -0.056 & 1      & -0.018 & -0.011 & 0.6    & 0.583  & -0.097 & -0.077       \\
+		$h_{L}$           & -0.056 & 1      & -0.018 & -0.011 & 0.6    & 0.583  & -0.097 & -0.077       \\
 		$D_N$        & 0.063  & -0.018 & 1      & 0.051  & 0.522  & -0.367 & -0.232 & -0.267       \\
-		PS           & 0.042  & -0.011 & 0.051  & 1      & 0.464  & 0.403  & -0.081 & -0.1         \\
+		$U_{xy}$           & 0.042  & -0.011 & 0.051  & 1      & 0.464  & 0.403  & -0.081 & -0.1         \\
 		S            & 0.003  & 0.6    & 0.522  & 0.464  & 1      & 0.398  & -0.209 & -0.176       \\
 		F            & 0.044  & 0.583  & -0.367 & 0.403  & 0.398  & 1      & 0.015  & -0.014       \\
 		E            & -0.108 & -0.097 & -0.232 & -0.081 & -0.209 & 0.015  & 1      & 0.215        \\
@@ -234,17 +234,17 @@ The factorial experimental analysis of variance (ANOVA) yields results relating 
 	\hline
 	& \multicolumn{2}{c}{F}                 & \multicolumn{2}{c}{E}                & \multicolumn{2}{c}{$\sigma_{T}$} \\ \hline
 	\multicolumn{1}{c|}{Effect}        & f      & \multicolumn{1}{c|}{p-value} & f     & \multicolumn{1}{c|}{p-value} & f              & p-value         \\
-	\multicolumn{1}{c|}{LH}            & 349.41 & \multicolumn{1}{c|}{*}       & 2.17  & \multicolumn{1}{c|}{0.117}   & 382.56         & *               \\
+	\multicolumn{1}{c|}{$h_{L}$}            & 349.41 & \multicolumn{1}{c|}{*}       & 2.17  & \multicolumn{1}{c|}{0.117}   & 382.56         & *               \\
 	\multicolumn{1}{c|}{$D_{N}$}       & 361.45 & \multicolumn{1}{c|}{*}       & 11.30 & \multicolumn{1}{c|}{*}       & 3.44           & 0.034           \\
-	\multicolumn{1}{c|}{PS}            & 213.43 & \multicolumn{1}{c|}{*}       & 9.37  & \multicolumn{1}{c|}{*}       & 9.17           & *               \\
-	\multicolumn{1}{c|}{$LH*D_{N}$}    & 15.05  & \multicolumn{1}{c|}{*}       & 1.17  & \multicolumn{1}{c|}{0.326}   & 16.10          & *               \\
-	\multicolumn{1}{c|}{$LH*PS$}       & 44.50  & \multicolumn{1}{c|}{*}       & 3.21  & \multicolumn{1}{c|}{0.014}   & 30.16          & *               \\
-	\multicolumn{1}{c|}{$D_{N}*PS$}    & 4.77   & \multicolumn{1}{c|}{0.001}   & 1.22  & \multicolumn{1}{c|}{0.304}   & 35.95          & *               \\
-	\multicolumn{1}{c|}{$LH*D_{N}*PS$} & 3.97   & \multicolumn{1}{c|}{*}       & 0.67  & \multicolumn{1}{c|}{0.714}   & 53.64          & *               \\ \hline
+	\multicolumn{1}{c|}{$U_{xy}$}            & 213.43 & \multicolumn{1}{c|}{*}       & 9.37  & \multicolumn{1}{c|}{*}       & 9.17           & *               \\
+	\multicolumn{1}{c|}{$h_{L}*D_{N}$}    & 15.05  & \multicolumn{1}{c|}{*}       & 1.17  & \multicolumn{1}{c|}{0.326}   & 16.10          & *               \\
+	\multicolumn{1}{c|}{$h_{L}*U_{xy}$}       & 44.50  & \multicolumn{1}{c|}{*}       & 3.21  & \multicolumn{1}{c|}{0.014}   & 30.16          & *               \\
+	\multicolumn{1}{c|}{$D_{N}*U_{xy}$}    & 4.77   & \multicolumn{1}{c|}{0.001}   & 1.22  & \multicolumn{1}{c|}{0.304}   & 35.95          & *               \\
+	\multicolumn{1}{c|}{$h_{L}*D_{N}*U_{xy}$} & 3.97   & \multicolumn{1}{c|}{*}       & 0.67  & \multicolumn{1}{c|}{0.714}   & 53.64          & *               \\ \hline
 \end{tabular}
 \end{table} 
 
-Applying the same type of analysis to the $90^{\circ}$ population yields similar results. Here, at a $95\%$ confidence interval, $PS$, $LH*D_{N}$, and $LH*PS$ do not play a significant role in the response of the Young's modulus, while the $LH$ does not affect $\sigma_{T}$. All other main and interaction effects are considered significant at the selected $\alpha = 0.05$ value. Results of the ANOVA test can be seen in Table \ref{tab:anova_90}.
+Applying the same type of analysis to the $90^{\circ}$ population yields similar results. Here, at a $95\%$ confidence interval, $U_{xy}$, $h_{L}*D_{N}$, and $h_{L}*U_{xy}$ do not play a significant role in the response of the Young's modulus, while the $h_{L}$ does not affect $\sigma_{T}$. All other main and interaction effects are considered significant at the selected $\alpha = 0.05$ value. Results of the ANOVA test can be seen in Table \ref{tab:anova_90}.
 
 \begin{table}[]
 	\renewcommand{\arraystretch}{1.5}
@@ -255,13 +255,13 @@ Applying the same type of analysis to the $90^{\circ}$ population yields similar
 		\hline
 		& \multicolumn{2}{c}{F}                 & \multicolumn{2}{c}{E}                & \multicolumn{2}{c}{$\sigma_{T}$} \\ \hline
 		\multicolumn{1}{c|}{Effect}        & f      & \multicolumn{1}{c|}{p-value} & f     & \multicolumn{1}{c|}{p-value} & f              & p-value         \\
-		\multicolumn{1}{c|}{LH}            & 416.87 & \multicolumn{1}{c|}{*}       & 3.37  & \multicolumn{1}{c|}{0.039}   & 0.37           & 0.693           \\
+		\multicolumn{1}{c|}{$h_{L}$}            & 416.87 & \multicolumn{1}{c|}{*}       & 3.37  & \multicolumn{1}{c|}{0.039}   & 0.37           & 0.693           \\
 		\multicolumn{1}{c|}{$D_{N}$}       & 122.68 & \multicolumn{1}{c|}{*}       & 25.24 & \multicolumn{1}{c|}{*}       & 234.96         & *               \\
-		\multicolumn{1}{c|}{PS}            & 166.16 & \multicolumn{1}{c|}{*}       & 2.84  & \multicolumn{1}{c|}{0.064}   & 41.39          & *               \\
-		\multicolumn{1}{c|}{$LH*D_{N}$}    & 13.09  & \multicolumn{1}{c|}{*}       & 0.62  & \multicolumn{1}{c|}{0.649}   & 25.51          & *               \\
-		\multicolumn{1}{c|}{$LH*PS$}       & 66.31  & \multicolumn{1}{c|}{*}       & 2.33  & \multicolumn{1}{c|}{0.063}   & 21.86          & *               \\
-		\multicolumn{1}{c|}{$D_{N}*PS$}    & 22.28  & \multicolumn{1}{c|}{*}       & 13.77 & \multicolumn{1}{c|}{*}       & 14.30          & *               \\
-		\multicolumn{1}{c|}{$LH*D_{N}*PS$} & 41.20  & \multicolumn{1}{c|}{*}       & 5.90  & \multicolumn{1}{c|}{*}       & 16.71          & *               \\ \hline
+		\multicolumn{1}{c|}{$U_{xy}$}            & 166.16 & \multicolumn{1}{c|}{*}       & 2.84  & \multicolumn{1}{c|}{0.064}   & 41.39          & *               \\
+		\multicolumn{1}{c|}{$h_{L}*D_{N}$}    & 13.09  & \multicolumn{1}{c|}{*}       & 0.62  & \multicolumn{1}{c|}{0.649}   & 25.51          & *               \\
+		\multicolumn{1}{c|}{$h_{L}*U_{xy}$}       & 66.31  & \multicolumn{1}{c|}{*}       & 2.33  & \multicolumn{1}{c|}{0.063}   & 21.86          & *               \\
+		\multicolumn{1}{c|}{$D_{N}*U_{xy}$}    & 22.28  & \multicolumn{1}{c|}{*}       & 13.77 & \multicolumn{1}{c|}{*}       & 14.30          & *               \\
+		\multicolumn{1}{c|}{$h_{L}*D_{N}*U_{xy}$} & 41.20  & \multicolumn{1}{c|}{*}       & 5.90  & \multicolumn{1}{c|}{*}       & 16.71          & *               \\ \hline
 	\end{tabular}
 \end{table} 
 
@@ -314,7 +314,7 @@ The optimal model architecture per the hyperparameter tuning process uses $64$ n
 \begin{figure}[!htbp]
 	\center
 	\includegraphics[width=0.7\linewidth, keepaspectratio]{nn1_perf_a}
-	\caption{Learning curves for the primary NN} \label{fig:nn1_p_a}
+	\caption{Learning curves for filament force (F), tensile modulus (E), and tensile strength (TS) using the RMSE metric} \label{fig:nn1_p_a}
 \end{figure}
 
 It should be noted that the model achieved an RMSE comparable to the range of uncertainty of the extrusion force and the Tensile Stress at failure. However, performance was poor in terms of the Young's Modulus prediction. This is better visualized in Figure \ref{fig:nn1_p_b}, where the true value of a response is plotted against the prediction of the model. A model that perfectly captures the behavior of the system is represented with a line of slope 1.
@@ -325,7 +325,7 @@ It should be noted that the model achieved an RMSE comparable to the range of un
 	\caption{Comparison of predictions and true ouputs using the validation set} \label{fig:nn1_p_b}
 \end{figure}
 
-Finally, exploring the SHAP results of the model allows one to draw conclusions regarding how the model is making predictions, and potentially how to fine tune a second iteration of the NN. Starting with the Force Output $F$, the greatest absolute average Shapley value was attributed to the $LH$. Next, both the $PS$ and $ND$ had Shapley value attributions of roughly half of that of $LH$. Finally, the print Orientation $O$ and the filament speed ratio $S_r$ had the lowest values, with $O$ having a Shapley value of roughly $1/6$ of the attribution of $LH$, while $S_r$ had an average impact of around $1/30$. These results are better appreciated in Figure \ref{fig:nn1_shapF}. 
+Finally, exploring the SHAP results of the model allows one to draw conclusions regarding how the model is making predictions, and potentially how to fine tune a second iteration of the NN. Starting with the Force Output $F$, the greatest absolute average Shapley value was attributed to the $h_{L}$. Next, both the $U_{xy}$ and $D_{N}$ had Shapley value attributions of roughly half of that of $h_{L}$. Finally, the print Orientation $O$ and the filament speed ratio $S_r$ had the lowest values, with $O$ having a Shapley value of roughly $1/6$ of the attribution of $h_{L}$, while $S_r$ had an average impact of around $1/30$. These results are better appreciated in Figure \ref{fig:nn1_shapF}. 
 
 \begin{figure}[!htbp]
 	\center
@@ -351,7 +351,7 @@ Unfortunately, while the model proved acceptable at predicting expected extrusio
    
 \section{Potential Applications}\label{sec:app}
 \subsection{Prediction of Failure Envelope}
-As the model is capable of predicting the tensile strength in the $0$ and $90$ degree orientation, it lends itself well to generate a very conservative version of the SSIC. Assuming that the failure at shear is approximately the failure at tension at $90^{\circ}$, that the failure stresses in compression are equal to their corresponding failure in tension, and that all stress interactions are 0, one could generate a SSIC failure envolope for a part as soon as it is finished printing. As an example, the failure envelope shown in Figure \ref{fig:fc_nn} was developed for printing conditions $LH= 0.1 mm, D_{N}= 0.3 mm, PS = 1200 mm/min, S_r = 0.96$. This could prove particularly useful for the automotive or aerospace industries, as all attempts known to the author to predict failure in AM through FC are locked to a fixed set of printing conditions. 
+As the model is capable of predicting the tensile strength in the $0^{\circ}$ and $90^{\circ}$ orientations, it lends itself well to generate a very conservative version of the SSIC. Assuming that the failure at shear is approximately the failure at tension at $90^{\circ}$, that the failure stresses in compression are equal to their corresponding failure in tension, and that all stress interactions are $0$, one could generate a SSIC failure envolope for a part as soon as it is finished printing. As an example, the failure envelope shown in Figure \ref{fig:fc_nn} was developed for printing conditions $h_{L}= 0.1 mm, D_{N}= 0.3 mm, U_{xy} = 1200 mm/min, S_r = 0.96$. This could prove particularly useful for the automotive or aerospace industries, as all attempts known to the author to predict failure in AM through FC are locked to a fixed set of printing conditions. 
 
 \begin{figure}[!htbp]
 	\center
@@ -383,4 +383,7 @@ The predictions that stem from this resource can prove useful to engineers desig
 % Symbols introduced in this chapter:
 \nomenclature[S]{$\phi_{j}$}{Shapley Value}
 \nomenclature[S]{$\sigma_{T}$}{Maximum Tensile Stress}
+\nomenclature[S]{$D_{N}$}{Nozzle Diameter}
+\nomenclature[S]{$h_{H}$}{Layer Height}
+\nomenclature[S]{$U_{xy}$}{Print Speed}
 \end{document}
