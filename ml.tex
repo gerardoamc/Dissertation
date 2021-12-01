@@ -351,12 +351,28 @@ Unfortunately, while the model proved acceptable at predicting expected extrusio
    
 \section{Potential Applications}\label{sec:app}
 \subsection{Prediction of Failure Envelope}
-As the model is capable of predicting the tensile strength in the $0^{\circ}$ and $90^{\circ}$ orientations, it lends itself well to generate a very conservative version of the SSIC. Assuming that the failure at shear is approximately the failure at tension at $90^{\circ}$, that the failure stresses in compression are equal to their corresponding failure in tension, and that all stress interactions are $0$, one could generate a SSIC failure envolope for a part as soon as it is finished printing. As an example, the failure envelope shown in Figure \ref{fig:fc_nn} was developed for printing conditions $h_{L}= 0.1 mm, D_{N}= 0.3 mm, U_{xy} = 1200 mm/min, S_r = 0.96$. This could prove particularly useful for the automotive or aerospace industries, as all attempts known to the author to predict failure in AM through FC are locked to a fixed set of printing conditions. 
+As the model is capable of predicting the tensile strength in the $0^{\circ}$ and $90^{\circ}$ orientations, it lends itself well to generate a very conservative version of the SSIC. Assuming that the failure at shear is approximately the failure at tension at $90^{\circ}$, that the failure stresses in compression are equal to their corresponding failure in tension, and that all stress interactions are $0$, one could generate a SSIC failure envolope for a part as soon as it is finished printing. As an example, the failure envelope shown in Figures \ref{fig:fc_nn} and \ref{fig:SSIpred} was developed for printing conditions $h_{L}= 0.1 mm, D_{N}= 0.3 mm, U_{xy} = 1200 mm/min, S_r = 0.96$. This could prove particularly useful for the automotive or aerospace industries, as all attempts known to the author to predict failure in AM through FC are locked to a fixed set of printing conditions. 
 
 \begin{figure}[!htbp]
 	\center
-	\includegraphics[height=8cm, keepaspectratio]{pred_FC}
+	\includegraphics[height=9cm, keepaspectratio]{pred_FC}
 	\caption{Conservative Failure Surface predicted through the NN} \label{fig:fc_nn}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\center
+	\subfloat[Predicted failure envelope projection in the $\sigma_{11}$-$\sigma_{22}$ plane\label{fig:1122pred}]{%
+	\includegraphics[width=0.6\linewidth, keepaspectratio]{pred_FC_1122}
+	}
+	\linebreak
+	\subfloat[Predicted failure envelope projection in the $\sigma_{11}$-$\tau_{12}$ plane\label{fig:1112pred}]{%
+		\includegraphics[width=0.7\linewidth, keepaspectratio]{pred_FC_1112}
+	}
+	\linebreak
+	\subfloat[Predicted failure envelope projection in the $\sigma_{22}$-$\tau_{12}$ plane\label{fig:2212pred}]{%
+		\includegraphics[width=0.7\linewidth, keepaspectratio]{pred_FC_2212}
+	}
+	\caption{Predicted Failure envelope projections} \label{fig:SSIpred}
 \end{figure}
 
 \subsection{Detection of Print Defects or Printer Issues}
