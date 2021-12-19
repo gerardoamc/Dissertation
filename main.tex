@@ -26,10 +26,10 @@
         \subfile{#1}}
 
 \begin{document}
+	\pagenumbering{gobble} %No page number in front matter
+	\include{cover}
         \frontmatter
-        		\pagenumbering{gobble} %No page number in front matter
-                \include{cover}
-                \addcontentsline{toc}{chapter}{Front Matter}
+                %\addcontentsline{toc}{chapter}{Front Matter}
                 \pagenumbering{roman}
                 \include{abstract}                
                 \addcontentsline{toc}{section}{Abstract}
@@ -39,12 +39,12 @@
                 \tableofcontents
                 
                 \printnomenclature
-                \addcontentsline{toc}{section}{Nomenclature}
+                \addcontentsline{toc}{section}{Symbols and Acronyms}
                 \listoffigures
                 \addcontentsline{toc}{section}{\listfigurename}
-               \listoftables
-               \addcontentsline{toc}{section}{\listtablename}
-               \cleardoublepage
+                \listoftables
+                \addcontentsline{toc}{section}{\listtablename}
+                \cleardoublepage
                                
         \mainmatter
                 \pagestyle{fancy} % Needed again because it is turned off in some
