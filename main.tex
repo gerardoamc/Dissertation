@@ -29,20 +29,25 @@
 	\pagenumbering{gobble} %No page number in front matter
 	\include{cover}
         \frontmatter
-                %\addcontentsline{toc}{chapter}{Front Matter}
+                \addcontentsline{toc}{chapter}{Front Matter}
                 \pagenumbering{roman}
                 \include{abstract}                
                 \addcontentsline{toc}{section}{Abstract}
                 \include{acknowledgments}
                 \addcontentsline{toc}{section}{Acknowledgments}
                 \renewcommand{\contentsname}{Table of Contents}
-                \tableofcontents
-                
-                \printnomenclature
+                \tableofcontents{\thispagestyle{fancy}}
+             
+                \printnomenclature{\thispagestyle{fancy}}
                 \addcontentsline{toc}{section}{Symbols and Acronyms}
+                
+                \thispagestyle{fancy}
                 \listoffigures
                 \addcontentsline{toc}{section}{\listfigurename}
+                
+                \thispagestyle{fancy}
                 \listoftables
+                
                 \addcontentsline{toc}{section}{\listtablename}
                 \cleardoublepage
                                

@@ -47,7 +47,7 @@
   \item [{$\tau_{13}$}]\begingroup Shear stress in the 1-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{20}
   \item [{$\tau_{23}$}]\begingroup Shear stress in the 2-3 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{20}
   \item [{$D_{N}$}]\begingroup Nozzle Diameter\nomeqref {4.11}\nompageref{64}
-  \item [{$h_{H}$}]\begingroup Layer Height\nomeqref {4.11}\nompageref{64}
+  \item [{$h_{L}$}]\begingroup Layer Height\nomeqref {4.11}\nompageref{64}
   \item [{$S$}]\begingroup Shear strength in the 1-2 plane \nomunit{$MPa$}\nomeqref {1.5}\nompageref{20}
   \item [{$S_{45n}$}]\begingroup Negative shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{20}
   \item [{$S_{45p}$}]\begingroup Positive shear strength for 45$^\circ$ specimen \nomunit{$MPa$}\nomeqref {1.5}\nompageref{20}

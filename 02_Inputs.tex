@@ -72,7 +72,7 @@
 % the fancyhdr manual: http://texdoc.net/texmf-dist/doc/latex/fancyhdr/fancyhdr.pdf
 \fancypagestyle{plain}{%
 \fancyhf{} % clear all header and footer fields
-\fancyhead[LE, RO]{\thepage} %RO=right odd, RE=right even
+\fancyhead[R]{\thepage} %RO=right odd, LE=left even
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}}
 
@@ -80,10 +80,10 @@
 \fancyhf{}
 
 %%% Use these four to make it look like a nice book
-\fancyhead[LE, RO]{\thepage} % Page number
-\fancyhead[LO, RE]{\slshape \leftmark} % Chapter number and name
-\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
-\renewcommand{\headrulewidth}{1pt}
+\fancyhead[R]{\thepage} % Page number
+%\fancyhead[LO, RE]{\slshape \leftmark} % Chapter number and name
+%\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\headrulewidth}{0pt}
 
 %%% Use these two make it fit the University Guidelines
 %\fancyhead[RE, RO]{\thepage}
@@ -123,7 +123,7 @@
 	linkcolor=blue,		% Color of internal links (within document)
 	citecolor=blue,	    % Color of internal links to the Reference page (within document)
 	urlcolor=blue,		% Color of URLs (external) - default is magenta.
-	pdftitle = {Predicting mechanical properties of FFF parts1},
+	pdftitle = {Predicting mechanical properties of FFF parts},
 	pdfsubject = {Dissertation 2021},
 	pdfauthor = {Gerardo A. Mazzei Capote},
 	pdfkeywords = { },	
